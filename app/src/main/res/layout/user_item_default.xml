@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/user_imageView_def"
+        android:id="@+id/img_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"
         tools:srcCompat="@tools:sample/avatars"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
         app:layout_constraintBottom_toTopOf="@+id/txt_surname_def"
-        app:layout_constraintStart_toEndOf="@id/user_imageView_def"
+        app:layout_constraintStart_toEndOf="@id/img_avatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Name"
         />
