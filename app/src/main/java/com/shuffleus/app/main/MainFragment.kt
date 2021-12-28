@@ -5,15 +5,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.shuffleus.app.R
+import com.shuffleus.app.data.User
+import com.shuffleus.app.databinding.FragmentMainBinding
+import com.shuffleus.app.utils.ViewModelResponseState
+import java.util.*
 
 class MainFragment: Fragment() {
+
+    private val mainViewModel by viewModels<MainViewModel>()
+
+    private var _binding: FragmentMainBinding? = null
+    private val binding: FragmentMainBinding
+        get() = _binding!!
 
     /**
      * Inflate view hierarchy to this fragment.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        mainViewModel.getUsers().observe(viewLifecycleOwner){
+            when(it){
+                ViewModelResponseState.Idle -> doNothing()
+                ViewModelResponseState.Loading -> doNothing()
+                is ViewModelResponseState.Error -> doNothing()
+                is ViewModelResponseState.Success -> handleUsers(it.content)
+            }
+        }
+
+        mainViewModel.loadData()
+    }
+
+    private fun doNothing(){}
+
+    private fun handleUsers(users: List<User>) {
+        val adapter = UsersAdapter(users)
+        binding.rvGroups.adapter = adapter
+        binding.rvGroups.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    /**
+     * Stop any [Glide] operations related to this fragment.
+     */
+    override fun onStop() {
+        super.onStop()
+        Glide.with(this).onStop()
     }
 
     companion object {
