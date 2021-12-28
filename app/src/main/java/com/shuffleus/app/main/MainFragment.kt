@@ -1,5 +1,6 @@
 package com.shuffleus.app.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentMainBinding
+import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.ViewModelResponseState
-import java.util.*
 
 class MainFragment: Fragment() {
 
@@ -43,6 +43,14 @@ class MainFragment: Fragment() {
         }
 
         mainViewModel.loadData()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.btnList.setOnClickListener{
+            val intent = Intent(activity, SettingsActivity::class.java)
+
+            startActivity(intent)
+        }
     }
 
     private fun doNothing(){}

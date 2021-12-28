@@ -5,7 +5,7 @@ import com.shuffleus.app.repository.Repository
 
 class InMemoryRepository :Repository {
 
-    override fun getActiveUsers(): List<User> {
+    override fun getUsers(): List<User> {
         return listOf(
             User(name="Jan", surname = "Kleprlík", isActive = true ),
             User(name="Michal", surname = "Fuleky", isActive = true),
@@ -19,11 +19,15 @@ class InMemoryRepository :Repository {
 
     }
 
-    override fun getUsers(): List<User> {
+    override fun getActiveUsers(): List<User> {
         return listOf(
             User(name="Jan", surname = "Kleprlík", isActive = true ),
             User(name="Michal", surname = "Fuleky", isActive = true),
             User(name="Marek", surname = "Majer", isActive = true),
+            User(name="Eliška", surname = "Suchardová", isActive = true),
+            User(name="Eliška", surname = "Suchardová", isActive = true),
+            User(name="Eliška", surname = "Suchardová", isActive = true),
+            User(name="Eliška", surname = "Suchardová", isActive = true),
             User(name="Eliška", surname = "Suchardová", isActive = true),
         );
     }
