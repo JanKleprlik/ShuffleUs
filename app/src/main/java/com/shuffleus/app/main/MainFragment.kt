@@ -68,14 +68,4 @@ class MainFragment: Fragment() {
         super.onStop()
         Glide.with(this).onStop()
     }
-
-    companion object {
-        /**
-         * Factory method to create fragment instance. Framework requires empty default constructor.
-         */
-        @JvmStatic
-        fun newInstance(): MainFragment {
-            return MainFragment()
-        }
-    }
 }
