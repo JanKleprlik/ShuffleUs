@@ -8,15 +8,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.shuffleus.app.R
+import com.shuffleus.app.data.Group
+import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.ViewModelResponseState
+import com.shuffleus.app.utils.inflate
 
 class MainFragment: Fragment() {
 
     private val mainViewModel by viewModels<MainViewModel>()
+    private val adapter = GroupsAdapter()
 
     private var _binding: FragmentMainBinding? = null
     private val binding: FragmentMainBinding
@@ -33,12 +39,12 @@ class MainFragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
-        mainViewModel.getUsers().observe(viewLifecycleOwner){
+        mainViewModel.getGroups(2).observe(::getLifecycle) {
             when(it){
                 ViewModelResponseState.Idle -> doNothing()
                 ViewModelResponseState.Loading -> doNothing()
                 is ViewModelResponseState.Error -> doNothing()
-                is ViewModelResponseState.Success -> handleUsers(it.content)
+                is ViewModelResponseState.Success -> handleGroups(it.content)
             }
         }
 
@@ -55,10 +61,18 @@ class MainFragment: Fragment() {
 
     private fun doNothing(){}
 
-    private fun handleUsers(users: List<User>) {
-        val adapter = UsersAdapter(users)
+    private fun handleGroups(groups: List<Group>){
         binding.rvGroups.adapter = adapter
         binding.rvGroups.layoutManager = LinearLayoutManager(requireContext())
+
+        val railsItems = mutableListOf<RailsItem>()
+
+        groups.onEach { group ->
+            railsItems.add(RailsItem.RailsGroupName(group.groupName))
+            railsItems.add(RailsItem.RailsPeople(group.users))
+        }
+
+        adapter.groups = railsItems
     }
 
     /**

@@ -11,20 +11,26 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
+import com.shuffleus.app.utils.inflate
 
-class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
+class UsersAdapter(): RecyclerView.Adapter<UserViewHolder>(){
 
-    var users = users
+
+    var users = emptyList<User>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder =
+        UserViewHolder(parent.inflate(R.layout.user_item_default))
+    /*
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item_default, parent, false)
 
         return UserViewHolder(view)
     }
+    */
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         holder.bind(users[position])
