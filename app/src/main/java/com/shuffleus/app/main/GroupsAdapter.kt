@@ -10,50 +10,6 @@ import com.shuffleus.app.R
 import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.utils.inflate
 
-/*
-class GroupsAdapter(groups: List<Group>): RecyclerView.Adapter<GroupViewHolder>(){
-
-    var groups = groups
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.group_item_default, parent, false)
-
-        return GroupViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        holder.bind(groups[position])
-    }
-
-    override fun getItemCount(): Int {
-        return groups.count()
-    }
-}
-
-class GroupViewHolder(view: View): RecyclerView.ViewHolder(view){
-
-    private var _binding: FragmentMainBinding? = null
-    private val binding: FragmentMainBinding
-        get() = _binding!!
-
-    var rvGroups: RecyclerView = view.findViewById(R.id.rv_group)
-
-    fun bind(group: Group){
-        val adapter = UsersAdapter(group.users)
-
-
-
-
-        rvGroups
-    }
-
-}
-*/
-
 class GroupsAdapter() : RecyclerView.Adapter<BaseRailsViewHolder<RailsItem>>(){
 
     var groups:List<RailsItem> = emptyList()
@@ -80,7 +36,7 @@ class GroupsAdapter() : RecyclerView.Adapter<BaseRailsViewHolder<RailsItem>>(){
 
 
 class RailsGroupNameViewHolder(view: View) :BaseRailsViewHolder<RailsItem.RailsGroupName>(view){
-    val groupName by lazy { view.findViewById<TextView>(R.id.txt_group_name) }
+    private val groupName by lazy { view.findViewById<TextView>(R.id.txt_group_name) }
 
     override fun bind(item: RailsItem.RailsGroupName) {
         groupName.text = item.groupName
@@ -88,15 +44,15 @@ class RailsGroupNameViewHolder(view: View) :BaseRailsViewHolder<RailsItem.RailsG
 }
 
 class RailsPeopleViewHolder(view: View) :BaseRailsViewHolder<RailsItem.RailsPeople>(view){
-    val view = view
+    private val view = view
 
-    val rvPeople by lazy { view.findViewById<RecyclerView>(R.id.rv_group)}
+    private val rvPeople by lazy { view.findViewById<RecyclerView>(R.id.rv_group)}
 
     override fun bind(item: RailsItem.RailsPeople) {
         var adapter = UsersAdapter()
 
         rvPeople.adapter = adapter
-        rvPeople.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, true)
+        rvPeople.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         adapter.users = item.people
     }
 }

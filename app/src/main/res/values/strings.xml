@@ -3,4 +3,6 @@
     <string name="shuffle_btn">Shuffle</string>
     <string name="settings_btn">Settings</string>
     <string name="radioBtn_isActive">Playing</string>
+    <string name="group_size">Group size</string>
+    <string name="group_names">Group names</string>
 </resources>

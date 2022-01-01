@@ -8,16 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.shuffleus.app.R
 import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.RailsItem
-import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.ViewModelResponseState
-import com.shuffleus.app.utils.inflate
 
 class MainFragment: Fragment() {
 
@@ -39,7 +35,7 @@ class MainFragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
-        mainViewModel.getGroups(2).observe(::getLifecycle) {
+        mainViewModel.getGroups(5).observe(::getLifecycle) {
             when(it){
                 ViewModelResponseState.Idle -> doNothing()
                 ViewModelResponseState.Loading -> doNothing()

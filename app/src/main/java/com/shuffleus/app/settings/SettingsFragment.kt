@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
+import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentSettingsBinding
-import com.shuffleus.app.main.MainFragment
 import com.shuffleus.app.utils.ViewModelResponseState
 
 class SettingsFragment : Fragment() {
@@ -19,27 +18,20 @@ class SettingsFragment : Fragment() {
     private val binding: FragmentSettingsBinding
         get() = _binding!!
 
-    private val settingsViewModel by viewModels<SettingsViewModel>()
+    lateinit var settingsViewModel: SettingsViewModel// by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        settingsViewModel.getUsers().observe(viewLifecycleOwner){
-            when(it){
-                ViewModelResponseState.Idle -> doNothing()
-                ViewModelResponseState.Loading -> doNothing()
-                is ViewModelResponseState.Error -> doNothing()
-                is ViewModelResponseState.Success -> handleUsers(it.content)
-            }
-        }
+        savedInstanceState: Bundle?): View {
+
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+        settingsViewModel = SettingsViewModel(context!!);
 
         settingsViewModel.getUsers().observe(viewLifecycleOwner){
             when(it){
@@ -50,6 +42,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        preparePickers()
         settingsViewModel.loadData()
     }
 
@@ -64,6 +57,19 @@ class SettingsFragment : Fragment() {
         val adapter = UsersAdapter(users)
         binding.rvAllUsers.adapter = adapter
         binding.rvAllUsers.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun preparePickers(){
+        val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
+        groupSizePicker?.minValue = 2
+        groupSizePicker?.maxValue = settingsViewModel.getNumberOfActiveUsers()
+        groupSizePicker?.wrapSelectorWheel = false
+
+        val groupNamePicker = view?.findViewById<NumberPicker>(R.id.num_group_names)
+        val nameTypes = settingsViewModel.getNameTypes()
+        groupNamePicker?.minValue = 1
+        groupNamePicker?.maxValue = nameTypes.size
+        groupNamePicker?.displayedValues = nameTypes.toTypedArray()
     }
 
     companion object {

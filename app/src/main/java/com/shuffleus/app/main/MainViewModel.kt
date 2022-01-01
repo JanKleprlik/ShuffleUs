@@ -1,5 +1,7 @@
 package com.shuffleus.app.main
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,9 +25,15 @@ class MainViewModel: ViewModel() {
         return _activeUsers
     }
 
+
     fun getGroups(groupSize: Int): LiveData<ViewModelResponseState<List<Group>, String>>{
-        val groups = repository.getActiveUsers().chunked(groupSize) { people: List<User> ->
-            Group("Name", people)
+        val activeUsers = repository.getActiveUsers()
+
+        val chunkedPeople = activeUsers.chunked(groupSize)
+        val groups = mutableListOf<Group>()
+
+        chunkedPeople.forEachIndexed { index, list ->
+            groups.add(Group(repository.getGroupName(index, "Food"), list))
         }
 
         return MutableLiveData(ViewModelResponseState.Success(groups))

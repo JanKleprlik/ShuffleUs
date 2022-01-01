@@ -24,13 +24,6 @@ class UsersAdapter(): RecyclerView.Adapter<UserViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder =
         UserViewHolder(parent.inflate(R.layout.user_item_default))
-    /*
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item_default, parent, false)
-
-        return UserViewHolder(view)
-    }
-    */
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         holder.bind(users[position])

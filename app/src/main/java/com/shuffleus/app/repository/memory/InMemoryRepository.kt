@@ -29,6 +29,29 @@ class InMemoryRepository :Repository {
             User(name="Eliška", surname = "Suchardová", isActive = true),
             User(name="Eliška", surname = "Suchardová", isActive = true),
             User(name="Eliška", surname = "Suchardová", isActive = true),
-        );
+        )
+    }
+
+    override fun getGroupNames(): List<String>{
+        return listOf(
+            "Greek",
+            "Food",
+            "Drinks",
+        )
+    }
+
+    override fun getGroupName(index: Int, groupName: String): String{
+        val names = listOf<String>(
+            "Alpha",
+            "Beta",
+            "Gamma",
+            "Delta",
+            "Epsilon",
+            "Zeta",
+            "Eta",
+            "Theta",
+        )
+
+        return names[index]
     }
 }

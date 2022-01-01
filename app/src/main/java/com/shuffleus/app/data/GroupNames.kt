@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(
+data class GroupNames (
     val name: String,
-    val surname: String,
-    val isActive: Boolean)
+    val names: List<String>,
+    )
 {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var userId: Long = 0
+    var groupNameId: Long = 0
 }
