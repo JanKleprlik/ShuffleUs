@@ -11,13 +11,18 @@ import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.memory.InMemoryRepository
+import com.shuffleus.app.repository.room.RoomRepository
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.withContext
 
 class MainViewModel(app:Application): AndroidViewModel(app) {
 
-    private val repository: Repository by lazy { InMemoryRepository() }
+    //private val repository: Repository by lazy { InMemoryRepository() }
+    private val repository: Repository by lazy { RoomRepository(app.baseContext) }
 
     private val appSettings: AppSettings by lazy {
         AppSettings(app)
@@ -43,6 +48,21 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
             groups.add(Group(repository.getGroupName(index, "Food"), list))
         }
 
+        return MutableLiveData(ViewModelResponseState.Success(groups))
+    }
+
+    suspend fun getGroups(): LiveData<ViewModelResponseState<List<Group>, String>>{
+        val activeUsers = repository.getActiveUsers()
+
+        val groups = mutableListOf<Group>()
+
+        val groupSize = appSettings.getGroupSize()
+        val groupName = repository.getGroupNames().elementAt(appSettings.getGroupnamesIdx() - 1) //-1 is there for minim value of the picker
+        val chunkedPeople = activeUsers.chunked(groupSize)
+
+        chunkedPeople.forEachIndexed { index, list ->
+            groups.add(Group(repository.getGroupName(index, groupName ), list))
+        }
         return MutableLiveData(ViewModelResponseState.Success(groups))
     }
 

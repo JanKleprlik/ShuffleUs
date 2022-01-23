@@ -2,6 +2,7 @@ package com.shuffleus.app.repository.room
 
 import android.app.Application
 import android.content.Context
+import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
 
@@ -21,7 +22,11 @@ class RoomRepository(context: Context): Repository {
     }
 
     override fun getGroupName(index: Int, groupName: String): String {
-        return db.groupNamesDao().getNamesByGroupName(groupName)[index]
+        return db.groupNamesDao().getNamesByGroupName(groupName).split(',')[index]
+    }
+
+    override fun getGroupNamesAll(): List<GroupNames>{
+        return db.groupNamesDao().getAll()
     }
 
     override fun getGroupNames(): List<String> {

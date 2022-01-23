@@ -26,6 +26,13 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         }
     }
 
+    suspend fun getGroupNamesIdx() :Int{
+        return appSettings.getGroupnamesIdx()
+    }
+    suspend fun getGroupSize() : Int{
+        return appSettings.getGroupSize()
+    }
+
     fun updateGroupsName(newGroupnamesIdx: Int){
         viewModelScope.launch {
             appSettings.setGroupnamesIdx(newGroupnamesIdx)

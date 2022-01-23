@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.shuffleus.app.data.Group
@@ -14,7 +15,11 @@ import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.ViewModelResponseState
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Scope
+import kotlin.coroutines.coroutineContext
 
 class MainFragment: Fragment() {
 
@@ -56,9 +61,26 @@ class MainFragment: Fragment() {
 
             startActivity(intent)
         }
+
+        binding.btnShuffle.setOnClickListener{
+            lifecycleScope.launch { doShuffle() }
+
+        }
     }
 
     private fun doNothing(){}
+
+    private suspend fun doShuffle(){
+
+        mainViewModel.getGroups().observe(::getLifecycle) {
+            when(it){
+                ViewModelResponseState.Idle -> doNothing()
+                ViewModelResponseState.Loading -> doNothing()
+                is ViewModelResponseState.Error -> doNothing()
+                is ViewModelResponseState.Success -> handleGroups(it.content)
+            }
+        }
+    }
 
     private fun handleGroups(groups: List<Group>){
         binding.rvGroups.adapter = adapter

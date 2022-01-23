@@ -5,11 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.shuffleus.app.AppSettings.Companion.APP_PREFERENCES
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -46,9 +44,9 @@ class AppSettings(private val context: Context) {
     /**
      * Read last groupname from preferences
      */
-    fun getGroupnamesIdx(): Flow<Int> = context.dataStore.data.map { preferences ->
-        preferences[KEY_GROUPNAMES_IDX]!!
-    }
+    suspend fun getGroupnamesIdx(): Int = context.dataStore.data.map { preferences ->
+        preferences[KEY_GROUPNAMES_IDX] ?: 0
+    }.first()
 
     /**
      * Set groupname to preferences
@@ -62,9 +60,9 @@ class AppSettings(private val context: Context) {
     /**
      * Set group size to preferences
      */
-    fun getGroupSize(): Flow<Int> = context.dataStore.data.map { preferences ->
-        preferences[KEY_GROUPSIZE]!!
-    }
+    suspend fun getGroupSize() = context.dataStore.data.map { preferences ->
+        preferences[KEY_GROUPSIZE] ?: 2
+    }.first()
 
     /**
      * Set group size to preferences

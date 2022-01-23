@@ -13,9 +13,9 @@ interface GroupNamesDao {
     fun getNames(): List<String>
 
     @Query("SELECT names FROM GroupNames WHERE name = :name")
-    fun getNamesByGroupName(name: String): List<String>
+    fun getNamesByGroupName(name: String): String
 
     @Insert
-    fun insertAll(vararg users: GroupNames)
+    fun insertAll(vararg groupNames: GroupNames)
     
 }

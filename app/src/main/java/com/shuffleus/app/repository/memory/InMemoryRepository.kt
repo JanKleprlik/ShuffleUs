@@ -1,5 +1,6 @@
 package com.shuffleus.app.repository.memory
 
+import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
 
@@ -38,6 +39,10 @@ class InMemoryRepository :Repository {
             "Food",
             "Drinks",
         )
+    }
+
+    override fun getGroupNamesAll(): Iterable<GroupNames> {
+        throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
     }
 
     override fun addUser(vararg users: User) {

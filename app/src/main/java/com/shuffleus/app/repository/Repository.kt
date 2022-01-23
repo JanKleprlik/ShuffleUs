@@ -1,5 +1,6 @@
 package com.shuffleus.app.repository
 
+import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 
 interface Repository
@@ -23,6 +24,8 @@ interface Repository
      *  Get types of names of groups
      */
     fun getGroupNames(): Iterable<String>
+
+    fun getGroupNamesAll(): Iterable<GroupNames>
 
     fun addUser(vararg users: User)
 }

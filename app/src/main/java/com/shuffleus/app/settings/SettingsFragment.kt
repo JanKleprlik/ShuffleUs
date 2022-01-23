@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shuffleus.app.AppSettings
 import com.shuffleus.app.R
@@ -14,6 +15,7 @@ import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentSettingsBinding
 import com.shuffleus.app.utils.AddPlayerCallbackListener
 import com.shuffleus.app.utils.ViewModelResponseState
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
@@ -23,12 +25,19 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModel>()
 
+    //private var groupSize: Int = 2
+    //private var groupNamesIdx: Int = 1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+        //lifecycleScope.launch {
+        //    groupSize = settingsViewModel.getGroupSize()
+        //    groupNamesIdx = settingsViewModel.getGroupNamesIdx()
+        //}
 
         binding.btnAddPlayer.setOnClickListener {
             AddPlayerFragment(this).show(childFragmentManager, "addPlayerDialog")
@@ -57,7 +66,9 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
             }
         }
 
-        preparePickers()
+        lifecycleScope.launch{
+            preparePickers()
+        }
         settingsViewModel.loadData()
     }
 
@@ -74,14 +85,15 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
         binding.rvAllUsers.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun preparePickers(){
+    private suspend fun preparePickers(){
         val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
         groupSizePicker?.minValue = 2
         groupSizePicker?.maxValue = settingsViewModel.getNumberOfActiveUsers()
         groupSizePicker?.wrapSelectorWheel = false
+        groupSizePicker?.value = settingsViewModel.getGroupSize()
         groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
             run {
-                settingsViewModel.updateGroupsName(newVal)
+                settingsViewModel.updateGroupSize(newVal)
             }
         }
 
@@ -91,9 +103,10 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
         groupNamePicker?.minValue = 1
         groupNamePicker?.maxValue = nameTypes.size
         groupNamePicker?.displayedValues = nameTypes.toTypedArray()
+        groupNamePicker?.value = settingsViewModel.getGroupNamesIdx()
         groupNamePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
             run {
-                settingsViewModel.updateGroupSize(newVal)
+                settingsViewModel.updateGroupsName(newVal) //-1 for minimum value = 1
             }
         }
     }
