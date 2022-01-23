@@ -40,6 +40,10 @@ class InMemoryRepository :Repository {
         )
     }
 
+    override fun addUser(vararg users: User) {
+        throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
+    }
+
     override fun getGroupName(index: Int, groupName: String): String{
         val names = listOf<String>(
             "Alpha",

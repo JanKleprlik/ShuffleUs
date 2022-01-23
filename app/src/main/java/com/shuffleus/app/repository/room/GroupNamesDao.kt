@@ -17,4 +17,5 @@ interface GroupNamesDao {
 
     @Insert
     fun insertAll(vararg users: GroupNames)
+    
 }

@@ -6,32 +6,47 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.shuffleus.app.AppSettings
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentSettingsBinding
+import com.shuffleus.app.utils.AddPlayerCallbackListener
 import com.shuffleus.app.utils.ViewModelResponseState
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding: FragmentSettingsBinding
         get() = _binding!!
 
-    lateinit var settingsViewModel: SettingsViewModel// by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View {
-
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+
+
+        binding.btnAddPlayer.setOnClickListener {
+            AddPlayerFragment(this).show(childFragmentManager, "addPlayerDialog")
+        }
+
+        binding.btnTEST.setOnClickListener{
+            settingsViewModel.addUser(User("TEST", "TEST", true))
+        }
+
         return binding.root
+    }
+
+    override fun onPlayerAdded(newUser:User){
+        settingsViewModel.addUser(newUser)
     }
 
     override fun onStart() {
         super.onStart()
-        settingsViewModel = SettingsViewModel(context!!);
 
         settingsViewModel.getUsers().observe(viewLifecycleOwner){
             when(it){
@@ -64,12 +79,23 @@ class SettingsFragment : Fragment() {
         groupSizePicker?.minValue = 2
         groupSizePicker?.maxValue = settingsViewModel.getNumberOfActiveUsers()
         groupSizePicker?.wrapSelectorWheel = false
+        groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+            run {
+                settingsViewModel.updateGroupsName(newVal)
+            }
+        }
+
 
         val groupNamePicker = view?.findViewById<NumberPicker>(R.id.num_group_names)
         val nameTypes = settingsViewModel.getNameTypes()
         groupNamePicker?.minValue = 1
         groupNamePicker?.maxValue = nameTypes.size
         groupNamePicker?.displayedValues = nameTypes.toTypedArray()
+        groupNamePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+            run {
+                settingsViewModel.updateGroupSize(newVal)
+            }
+        }
     }
 
     companion object {

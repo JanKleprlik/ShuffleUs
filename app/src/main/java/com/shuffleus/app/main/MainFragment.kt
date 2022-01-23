@@ -14,6 +14,7 @@ import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.ViewModelResponseState
+import kotlinx.coroutines.flow.collect
 
 class MainFragment: Fragment() {
 
@@ -35,7 +36,8 @@ class MainFragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
-        mainViewModel.getGroups(5).observe(::getLifecycle) {
+        /*
+        mainViewModel.getGroups(4).observe(::getLifecycle) {
             when(it){
                 ViewModelResponseState.Idle -> doNothing()
                 ViewModelResponseState.Loading -> doNothing()
@@ -43,6 +45,7 @@ class MainFragment: Fragment() {
                 is ViewModelResponseState.Success -> handleGroups(it.content)
             }
         }
+        */
 
         mainViewModel.loadData()
     }

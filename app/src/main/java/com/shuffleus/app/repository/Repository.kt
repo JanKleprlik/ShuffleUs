@@ -23,4 +23,6 @@ interface Repository
      *  Get types of names of groups
      */
     fun getGroupNames(): Iterable<String>
+
+    fun addUser(vararg users: User)
 }

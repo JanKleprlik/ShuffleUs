@@ -14,4 +14,10 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">monospace</item>
     </style>
+
+    <style name="DialogTheme" parent="Theme.ShuffleUs">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
 </resources>

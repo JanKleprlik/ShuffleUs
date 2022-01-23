@@ -14,7 +14,10 @@ class RoomRepository(context: Context): Repository {
 
     override fun getUsers(): List<User> {
         return db.userDao().getAll()
+    }
 
+    override fun addUser(vararg users:User){
+        return db.userDao().insertAll(*users)
     }
 
     override fun getGroupName(index: Int, groupName: String): String {
