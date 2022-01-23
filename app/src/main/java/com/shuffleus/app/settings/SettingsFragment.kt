@@ -1,5 +1,6 @@
 package com.shuffleus.app.settings
 
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -85,7 +86,6 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
             }
         }
 
-
         val groupNamePicker = view?.findViewById<NumberPicker>(R.id.num_group_names)
         val nameTypes = settingsViewModel.getNameTypes()
         groupNamePicker?.minValue = 1
@@ -97,6 +97,18 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
                 settingsViewModel.updateGroupsName(newVal)
             }
         }
+
+        val timerPicker = view?.findViewById<NumberPicker>(R.id.num_time_interval)
+        timerPicker?.minValue = 1
+        timerPicker?.maxValue = 12
+        timerPicker?.displayedValues = arrayOf("5 min", "10 min", "15 min", "20 min", "25 min", "30 min", "35 min", "40 min", "45 min", "50 min", "55 min", getString(R.string.one_hour))
+        timerPicker?.value = settingsViewModel.getTimerIdx()
+        timerPicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+            run {
+                settingsViewModel.updateTimerIdx(newVal)
+            }
+        }
+
     }
 
     companion object {

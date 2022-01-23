@@ -33,6 +33,16 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         return appSettings.getGroupSize()
     }
 
+    suspend fun getTimerIdx(): Int{
+        return appSettings.getTimerIdx()
+    }
+
+    fun updateTimerIdx(newIdx: Int){
+        viewModelScope.launch {
+            appSettings.setTimerIdx(newIdx)
+        }
+    }
+
     fun updateGroupsName(newGroupnamesIdx: Int){
         viewModelScope.launch {
             appSettings.setGroupnamesIdx(newGroupnamesIdx)

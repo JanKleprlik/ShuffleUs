@@ -21,6 +21,7 @@ class AppSettings(private val context: Context) {
         private val KEY_APP_LAUNCH_COUNT = intPreferencesKey("app_launches")
         private val KEY_GROUPNAMES_IDX = intPreferencesKey("groupnames")
         private val KEY_GROUPSIZE = intPreferencesKey("groupsize")
+        private val KEY_TIMER_IDX = intPreferencesKey("timer_idx")
     }
 
 
@@ -70,6 +71,22 @@ class AppSettings(private val context: Context) {
     suspend fun setGroupSize(size: Int) {
         context.dataStore.edit { preferences ->
             preferences[KEY_GROUPSIZE] = size
+        }
+    }
+
+    /**
+     * Set group size to preferences
+     */
+    suspend fun getTimerIdx() = context.dataStore.data.map { preferences ->
+        preferences[KEY_TIMER_IDX] ?: 1
+    }.first()
+
+    /**
+     * Set group size to preferences
+     */
+    suspend fun setTimerIdx(newIdx: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_TIMER_IDX] = newIdx
         }
     }
 }

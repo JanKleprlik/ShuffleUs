@@ -11,4 +11,7 @@
     <string name="surname">Surname</string>
     <string name="add_new_player_info">Add new player</string>
     <string name="btn_add">Add</string>
+    <string name="timer_notification">Time is up.</string>
+    <string name="time_interval">Timer</string>
+    <string name="one_hour">1 hour</string>
 </resources>
