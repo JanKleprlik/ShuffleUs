@@ -38,19 +38,6 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         return _activeUsers
     }
 
-    fun getGroups(groupSize: Int): LiveData<ViewModelResponseState<List<Group>, String>>{
-        val activeUsers = repository.getActiveUsers()
-
-        val chunkedPeople = activeUsers.chunked(groupSize)
-        val groups = mutableListOf<Group>()
-
-        chunkedPeople.forEachIndexed { index, list ->
-            groups.add(Group(repository.getGroupName(index, "Food"), list))
-        }
-
-        return MutableLiveData(ViewModelResponseState.Success(groups))
-    }
-
     suspend fun getGroups(): LiveData<ViewModelResponseState<List<Group>, String>>{
         val activeUsers = repository.getActiveUsers()
 

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class User(
     val name: String,
     val surname: String,
-    val isActive: Boolean)
+    var isActive: Boolean)
 {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

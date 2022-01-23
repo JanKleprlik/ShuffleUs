@@ -41,12 +41,7 @@
             android:layout_gravity="center"
 
             />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_TEST"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEST"
-            />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/txt_group_name"
             android:layout_width="wrap_content"

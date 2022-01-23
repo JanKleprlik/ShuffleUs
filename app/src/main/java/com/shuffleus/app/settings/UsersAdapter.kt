@@ -11,6 +11,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
+import com.shuffleus.app.repository.Repository
+import com.shuffleus.app.repository.room.RoomRepository
 import java.security.Signature
 
 class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
@@ -36,8 +38,9 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
     }
 }
 
-class UserViewHolder(view: View): RecyclerView.ViewHolder(view){
-    val view = view
+class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
+    private val repository: Repository by lazy { RoomRepository(view.context) }
+
     var txtName: TextView = view.findViewById(R.id.txt_name)
     var txtSurname: TextView = view.findViewById(R.id.txt_surname)
     var btnIsActive: CheckBox = view.findViewById(R.id.btn_isActive)
@@ -47,6 +50,12 @@ class UserViewHolder(view: View): RecyclerView.ViewHolder(view){
         txtName.text = user.name
         txtSurname.text = user.surname
         btnIsActive.isChecked = user.isActive
+
+        btnIsActive.setOnClickListener{
+            user.isActive = user.isActive.not()
+            repository.updateUser(user)
+        }
+
         Glide.with(view)
             .load("https://picsum.photos/64/64")
             .apply(RequestOptions.circleCropTransform()

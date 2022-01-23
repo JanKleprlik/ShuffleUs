@@ -25,26 +25,14 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
     private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModel>()
 
-    //private var groupSize: Int = 2
-    //private var groupNamesIdx: Int = 1
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-        //lifecycleScope.launch {
-        //    groupSize = settingsViewModel.getGroupSize()
-        //    groupNamesIdx = settingsViewModel.getGroupNamesIdx()
-        //}
-
         binding.btnAddPlayer.setOnClickListener {
             AddPlayerFragment(this).show(childFragmentManager, "addPlayerDialog")
-        }
-
-        binding.btnTEST.setOnClickListener{
-            settingsViewModel.addUser(User("TEST", "TEST", true))
         }
 
         return binding.root
@@ -106,7 +94,7 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
         groupNamePicker?.value = settingsViewModel.getGroupNamesIdx()
         groupNamePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
             run {
-                settingsViewModel.updateGroupsName(newVal) //-1 for minimum value = 1
+                settingsViewModel.updateGroupsName(newVal)
             }
         }
     }

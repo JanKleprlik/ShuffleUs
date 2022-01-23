@@ -41,6 +41,10 @@ class InMemoryRepository :Repository {
         )
     }
 
+    override fun updateUser(user: User) {
+        throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
+    }
+
     override fun getGroupNamesAll(): Iterable<GroupNames> {
         throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
     }

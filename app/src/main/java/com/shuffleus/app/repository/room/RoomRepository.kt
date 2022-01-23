@@ -33,4 +33,8 @@ class RoomRepository(context: Context): Repository {
         return db.groupNamesDao().getNames()
     }
 
+    override fun updateUser(user: User) {
+        db.userDao().updateUsers(user)
+    }
+
 }

@@ -25,6 +25,13 @@ interface Repository
      */
     fun getGroupNames(): Iterable<String>
 
+    /**
+     * Update user information.
+     * Such as whether it is active.
+     */
+    fun updateUser(user: User): Unit
+
+    // can be deleted
     fun getGroupNamesAll(): Iterable<GroupNames>
 
     fun addUser(vararg users: User)
