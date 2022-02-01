@@ -38,7 +38,7 @@ class AddPlayerFragment(private val callbackListener: AddPlayerCallbackListener)
         super.onViewCreated(view, savedInstanceState)
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener{dismiss()}
-        toolbar.title = "Add new player"
+        toolbar.title = getString(R.string.add_new_player_info)
 
         val nameText = view.findViewById<EditText>(R.id.edit_txt_new_name)
         val surnameText = view.findViewById<EditText>(R.id.edit_txt_new_surname)

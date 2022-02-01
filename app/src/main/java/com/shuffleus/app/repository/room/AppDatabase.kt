@@ -41,6 +41,9 @@ abstract class AppDatabase : RoomDatabase() {
                 .build()
 
         val USER_DATA = listOf(
+
+            User(name="Me", surname = "Myself & I", isActive = true ),
+        /*
             User(name="Jan", surname = "Kleprlík", isActive = true ),
             User(name="Michal", surname = "Fuleky", isActive = true),
             User(name="Marek", surname = "Majer", isActive = true),
@@ -51,6 +54,7 @@ abstract class AppDatabase : RoomDatabase() {
             User(name="Jan", surname = "Novák", isActive = false),
             User(name="Martin", surname = "Mareš", isActive = true),
             User(name="Pavel", surname = "Parizek", isActive = true),
+        */
         )
         val GROUP_NAMES_DATA = listOf(
             GroupNames(name="Greek", names= listOf(
@@ -69,7 +73,7 @@ abstract class AppDatabase : RoomDatabase() {
                 "Tiramisu",
                 "Pizza",
                 "Lasagne",
-                "Svíčková",
+                "Tortilla",
                 "Potato",
                 "Steak",
             )),
