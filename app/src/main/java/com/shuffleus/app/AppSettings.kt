@@ -20,8 +20,13 @@ class AppSettings(private val context: Context) {
         const val APP_PREFERENCES = "shuffleus_client"
         private val KEY_APP_LAUNCH_COUNT = intPreferencesKey("app_launches")
         private val KEY_GROUPNAMES_IDX = intPreferencesKey("groupnames")
+        private val KEY_OLD_GROUPNAMES_IDX = intPreferencesKey("old_groupnames")
         private val KEY_GROUPSIZE = intPreferencesKey("groupsize")
+        private val KEY_OLD_GROUPSIZE = intPreferencesKey("old_groupsize")
+        private val KEY_SEED = intPreferencesKey("seed")
+        private val KEY_OLD_SEED = intPreferencesKey("old_seed")
         private val KEY_TIMER_IDX = intPreferencesKey("timer_idx")
+
     }
 
 
@@ -43,7 +48,7 @@ class AppSettings(private val context: Context) {
     }
 
     /**
-     * Read last groupname from preferences
+     * Read groupname from preferences
      */
     suspend fun getGroupnamesIdx(): Int = context.dataStore.data.map { preferences ->
         preferences[KEY_GROUPNAMES_IDX] ?: 1
@@ -57,6 +62,24 @@ class AppSettings(private val context: Context) {
             preferences[KEY_GROUPNAMES_IDX] = groupnameIdx
         }
     }
+
+    /**
+     * Read last groupname from preferences
+     * Returns -1 if never used
+     */
+    suspend fun getOldGroupnamesIdx(): Int = context.dataStore.data.map { preferences ->
+        preferences[KEY_OLD_GROUPNAMES_IDX] ?: -1
+    }.first()
+
+    /**
+     * Update last groupname in preferences
+     */
+    suspend fun updateGroupnamesIdx() {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_OLD_GROUPNAMES_IDX] = getGroupnamesIdx()
+        }
+    }
+
 
     /**
      * Set group size to preferences
@@ -75,14 +98,65 @@ class AppSettings(private val context: Context) {
     }
 
     /**
-     * Set group size to preferences
+     * Get last group size to preferences
+     * Returns -1 if never used
+     */
+    suspend fun getOldGroupSize() = context.dataStore.data.map { preferences ->
+        preferences[KEY_OLD_GROUPSIZE] ?: -1
+    }.first()
+
+    /**
+     * Update last group size in preferences
+     */
+    suspend fun updateOldGroupSize() {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_OLD_GROUPSIZE] = getGroupSize()
+        }
+    }
+
+    /**
+     * Get seed
+     */
+    suspend fun getSeed() = context.dataStore.data.map { preferences ->
+        preferences[KEY_SEED] ?: 1
+    }.first()
+
+    /**
+     * Set seed
+     */
+    suspend fun incrementSeed() {
+        context.dataStore.edit { preferences ->
+            val seed = preferences[KEY_SEED] ?: 0
+            preferences[KEY_SEED] = seed + 1
+        }
+    }
+
+    /**
+     * Get last seed
+     * Returns -1 if never used
+     */
+    suspend fun getOldSeed() = context.dataStore.data.map { preferences ->
+        preferences[KEY_OLD_SEED] ?: -1
+    }.first()
+
+    /**
+     * Update last seed
+     */
+    suspend fun updateOldSeed() {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_OLD_SEED] = getSeed()
+        }
+    }
+
+    /**
+     * Get timer index to determine time interval
      */
     suspend fun getTimerIdx() = context.dataStore.data.map { preferences ->
         preferences[KEY_TIMER_IDX] ?: 1
     }.first()
 
     /**
-     * Set group size to preferences
+     * Set timer index to determine time interval
      */
     suspend fun setTimerIdx(newIdx: Int) {
         context.dataStore.edit { preferences ->

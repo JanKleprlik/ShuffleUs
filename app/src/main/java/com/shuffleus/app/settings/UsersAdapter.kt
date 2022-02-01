@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
+import com.shuffleus.app.main.MainFragment
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
 import java.security.Signature
@@ -30,7 +31,7 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(users[position])
+        holder.bind(users[position], this)
     }
 
     override fun getItemCount(): Int {
@@ -44,16 +45,27 @@ class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
     var txtName: TextView = view.findViewById(R.id.txt_name)
     var txtSurname: TextView = view.findViewById(R.id.txt_surname)
     var btnIsActive: CheckBox = view.findViewById(R.id.btn_isActive)
+    var btnDelete: Button = view.findViewById(R.id.btn_delete)
     var imgAvatar: ImageView = view.findViewById(R.id.img_avatar)
 
-    fun bind(user: User){
+    fun bind(user: User, adapter: UsersAdapter){
         txtName.text = user.name
         txtSurname.text = user.surname
         btnIsActive.isChecked = user.isActive
 
+
         btnIsActive.setOnClickListener{
+            if (user.wasChanged == false){
+                user.wasActive = user.isActive
+            }
             user.isActive = user.isActive.not()
+            user.wasChanged = true
             repository.updateUser(user)
+        }
+
+        btnDelete.setOnClickListener{
+            repository.deleteUser(user)
+            adapter.users = repository.getUsers()
         }
 
         Glide.with(view)

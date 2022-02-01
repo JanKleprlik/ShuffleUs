@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.shuffleus.app.main.MainFragment
 
-class PrefUtil {
+class TimerPreferences {
     companion object {
 
         /*

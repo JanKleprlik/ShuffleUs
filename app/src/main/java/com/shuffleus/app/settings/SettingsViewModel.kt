@@ -59,6 +59,10 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         return repository.getActiveUsers().size
     }
 
+    fun getNumberOfRawActiveUsers(): Int {
+        return repository.getRawActiveUsers().size
+    }
+
     fun getNameTypes() : List<String> {
         return repository.getGroupNames() as List<String>
     }

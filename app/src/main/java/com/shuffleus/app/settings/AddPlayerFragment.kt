@@ -46,7 +46,7 @@ class AddPlayerFragment(private val callbackListener: AddPlayerCallbackListener)
         val addBtn = view.findViewById<Button>(R.id.btn_confirm_add_player)
 
         addBtn.setOnClickListener{
-            val user = User(nameText.text.toString(), surnameText.text.toString(), true)
+            val user = User(nameText.text.toString(), surnameText.text.toString(), true, wasChanged = true, wasActive = false)
             callbackListener.onPlayerAdded(user)
             dismiss()
         }

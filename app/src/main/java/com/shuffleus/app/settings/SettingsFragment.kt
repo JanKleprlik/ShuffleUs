@@ -17,6 +17,7 @@ import com.shuffleus.app.databinding.FragmentSettingsBinding
 import com.shuffleus.app.utils.AddPlayerCallbackListener
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
+import java.lang.Integer.max
 
 class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
@@ -77,7 +78,7 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
     private suspend fun preparePickers(){
         val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
         groupSizePicker?.minValue = 2
-        groupSizePicker?.maxValue = settingsViewModel.getNumberOfActiveUsers()
+        groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
         groupSizePicker?.wrapSelectorWheel = false
         groupSizePicker?.value = settingsViewModel.getGroupSize()
         groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->

@@ -8,8 +8,11 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun getAll(): List<User>
 
-    @Query("SELECT * FROM user WHERE isActive = 1")
+    @Query("SELECT * FROM user WHERE (isActive = 1 AND wasChanged = 0) OR (wasChanged = 1 AND wasActive = 1)")
     fun getActiveUsers(): List<User>
+
+    @Query("SELECT * FROM user WHERE isActive = 1")
+    fun getRawActiveUsers(): List<User>
 
     @Update
     fun updateUsers(vararg users: User)
@@ -19,4 +22,5 @@ interface UserDao {
 
     @Delete
     fun delete(user: User)
+
 }

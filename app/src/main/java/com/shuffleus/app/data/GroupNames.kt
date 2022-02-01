@@ -11,6 +11,5 @@ data class GroupNames (
     )
 {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     var groupNameId: Long = 0
 }

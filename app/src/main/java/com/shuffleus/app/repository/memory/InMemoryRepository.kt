@@ -1,5 +1,6 @@
 package com.shuffleus.app.repository.memory
 
+import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
@@ -8,7 +9,7 @@ class InMemoryRepository :Repository {
 
     override fun getUsers(): List<User> {
         return listOf(
-            User(name="Jan", surname = "Kleprlík", isActive = true ),
+            User(name="Jan", surname = "Kleprlík", isActive = true),
             User(name="Michal", surname = "Fuleky", isActive = true),
             User(name="Marek", surname = "Majer", isActive = true),
             User(name="Michal", surname = "Ivicic", isActive = false),
@@ -33,6 +34,11 @@ class InMemoryRepository :Repository {
         )
     }
 
+    override fun getRawActiveUsers(): List<User> {
+        throw NotImplementedError("Operation: getRawActiveUsers is not implemented on MemoryRepository.")
+
+    }
+
     override fun getGroupNames(): List<String>{
         return listOf(
             "Greek",
@@ -42,15 +48,23 @@ class InMemoryRepository :Repository {
     }
 
     override fun updateUser(user: User) {
-        throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
+        throw NotImplementedError("Operation: updateUser is not implemented on MemoryRepository.")
+    }
+
+    override fun deleteUser(user: User) {
+        throw NotImplementedError("Operation: deleteUser is not implemented on MemoryRepository.")
     }
 
     override fun getGroupNamesAll(): Iterable<GroupNames> {
-        throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
+        throw NotImplementedError("Operation: getGroupNamesAll is not implemented on MemoryRepository.")
     }
 
     override fun addUser(vararg users: User) {
         throw NotImplementedError("Operation: addUser is not implemented on MemoryRepository.")
+    }
+
+    override fun makeUsersCurrent() {
+        throw NotImplementedError("Operation: makeUsersCurrent is not implemented on MemoryRepository.")
     }
 
     override fun getGroupName(index: Int, groupName: String): String{

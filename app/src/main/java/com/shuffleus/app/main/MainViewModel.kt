@@ -1,23 +1,16 @@
 package com.shuffleus.app.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.shuffleus.app.AppSettings
 import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
-import com.shuffleus.app.repository.memory.InMemoryRepository
 import com.shuffleus.app.repository.room.RoomRepository
 import com.shuffleus.app.utils.ViewModelResponseState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 class MainViewModel(app:Application): AndroidViewModel(app) {
 
@@ -44,19 +37,36 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
     }
 
     suspend fun getGroups(): LiveData<ViewModelResponseState<List<Group>, String>>{
-        val activeUsers = repository.getActiveUsers()
+        if (isLastRunValid() == false)
+            return MutableLiveData(ViewModelResponseState.Error("Previous run is not valid. Try Shuffle."))
 
         val groups = mutableListOf<Group>()
 
-        val groupSize = appSettings.getGroupSize()
-        val groupName = repository.getGroupNames().elementAt(appSettings.getGroupnamesIdx() - 1) //-1 is there for minim value of the picker
-        val chunkedPeople = activeUsers.chunked(groupSize)
+        // group names (Food, Greek, ...)
+        val groupName = repository.getGroupNames().elementAt(appSettings.getOldGroupnamesIdx() - 1) //-1 is there for minim value of the picker
 
-        chunkedPeople.forEachIndexed { index, list ->
+        // active users chunked by group size
+        val chunkedPlayers = getUniquelyChunkedPlayers()
+
+        chunkedPlayers.forEachIndexed { index, list ->
             groups.add(Group(repository.getGroupName(index, groupName ), list))
         }
         return MutableLiveData(ViewModelResponseState.Success(groups))
     }
+
+    suspend fun updatePreferences(): Unit{
+        // update seed
+        appSettings.incrementSeed()
+
+        // update old values
+        appSettings.updateGroupnamesIdx()
+        appSettings.updateOldGroupSize()
+        appSettings.updateOldSeed()
+
+        // update active players in DB
+        repository.makeUsersCurrent()
+    }
+
 
     fun loadData(){
         _activeUsers.postValue(ViewModelResponseState.Loading)
@@ -68,5 +78,18 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
 
         val users = repository.getActiveUsers()
         _activeUsers.postValue(ViewModelResponseState.Success(users))
+    }
+
+    private suspend fun isLastRunValid(): Boolean {
+        return appSettings.getOldGroupSize() != -1 &&
+                appSettings.getOldGroupnamesIdx() != -1
+    }
+
+    private suspend fun getUniquelyChunkedPlayers() :List<List<User>>{
+        var activeUsers = repository.getActiveUsers()
+        val groupSize = appSettings.getOldGroupSize()
+
+        activeUsers = activeUsers.shuffled(Random(appSettings.getOldSeed()))
+        return activeUsers.chunked(groupSize)
     }
 }

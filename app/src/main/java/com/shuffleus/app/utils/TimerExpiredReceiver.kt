@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.shuffleus.app.App
 import com.shuffleus.app.R
 import com.shuffleus.app.main.MainActivity
@@ -23,8 +22,8 @@ class TimerExpiredReceiver : BroadcastReceiver() {
             Constants.ACTION_START -> {
                 fireNotification(context)
 
-                PrefUtil.setTimerState(MainFragment.TimerState.Stopped, context)
-                PrefUtil.setAlarmSetTime(0, context)
+                TimerPreferences.setTimerState(MainFragment.TimerState.Stopped, context)
+                TimerPreferences.setAlarmSetTime(0, context)
             }
             Constants.ACTION_RESTART -> {
                 // cancel notifications
@@ -32,11 +31,11 @@ class TimerExpiredReceiver : BroadcastReceiver() {
                 notifManager.cancel(notificationID)
 
                 // restart timer
-                val minutesRemaining = PrefUtil.getTimerLength(context)
+                val minutesRemaining = TimerPreferences.getTimerLength(context)
                 val secondsRemaining = minutesRemaining * 60L
                 MainFragment.setAlarm(context, MainFragment.nowSeconds, secondsRemaining)
-                PrefUtil.setTimerState(MainFragment.TimerState.Running, context)
-                PrefUtil.setSecondsRemaining(secondsRemaining, context)
+                TimerPreferences.setTimerState(MainFragment.TimerState.Running, context)
+                TimerPreferences.setSecondsRemaining(secondsRemaining, context)
             }
         }
 

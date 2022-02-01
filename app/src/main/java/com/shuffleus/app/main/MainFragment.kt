@@ -19,7 +19,7 @@ import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.Constants
-import com.shuffleus.app.utils.PrefUtil
+import com.shuffleus.app.utils.TimerPreferences
 import com.shuffleus.app.utils.TimerExpiredReceiver
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
@@ -41,6 +41,7 @@ class MainFragment: Fragment() {
     private var timerState = TimerState.Stopped
     private var secondsRemaining: Long = 0
 
+    // region FRAGMENT METHODS
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
@@ -57,6 +58,20 @@ class MainFragment: Fragment() {
         // update timer if necessary
         initTimer()
         removeAlarm(this.context!!)
+
+        lifecycleScope.launch {
+            // visualize groups but do not change seed on resume
+            // (seed is changed only on shuffle)
+            mainViewModel.getGroups().observe(::getLifecycle) {
+                when(it){
+                    ViewModelResponseState.Idle -> doNothing()
+                    ViewModelResponseState.Loading -> doNothing()
+                    is ViewModelResponseState.Error -> doNothing()
+                    is ViewModelResponseState.Success -> handleGroups(it.content)
+                }
+            }
+        }
+
     }
 
     override fun onPause() {
@@ -69,9 +84,9 @@ class MainFragment: Fragment() {
         }
 
         // update times
-        PrefUtil.setPreviousTimerLengthSeconds(timerLengthSeconds, this.context!!)
-        PrefUtil.setSecondsRemaining(secondsRemaining, this.context!!)
-        PrefUtil.setTimerState(timerState, this.context!!)
+        TimerPreferences.setPreviousTimerLengthSeconds(timerLengthSeconds, this.context!!)
+        TimerPreferences.setSecondsRemaining(secondsRemaining, this.context!!)
+        TimerPreferences.setTimerState(timerState, this.context!!)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +99,7 @@ class MainFragment: Fragment() {
             lifecycleScope.launch {
                 val time = mainViewModel.getTimeInMillis().toLong()
                 val timeInMinutes = (time / (1000 * 60)).toInt()
-                PrefUtil.setTimerLength(timeInMinutes, context!!)
+                TimerPreferences.setTimerLength(timeInMinutes, context!!)
                 doShuffle()
             }
         }
@@ -102,14 +117,7 @@ class MainFragment: Fragment() {
     private fun doNothing(){}
 
     private suspend fun doShuffle(){
-        mainViewModel.getGroups().observe(::getLifecycle) {
-            when(it){
-                ViewModelResponseState.Idle -> doNothing()
-                ViewModelResponseState.Loading -> doNothing()
-                is ViewModelResponseState.Error -> doNothing()
-                is ViewModelResponseState.Success -> handleGroups(it.content)
-            }
-        }
+
         // Cancel ongoing timer
         if (timerState == TimerState.Running)
         {
@@ -118,15 +126,25 @@ class MainFragment: Fragment() {
             removeAlarm(this.context!!)
             onTimerFinished()
         }
-        // Set new timer
+        // Set new timer and update groups
         else
         {
+            mainViewModel.updatePreferences()
+
+            mainViewModel.getGroups().observe(::getLifecycle) {
+                when(it){
+                    ViewModelResponseState.Idle -> doNothing()
+                    ViewModelResponseState.Loading -> doNothing()
+                    is ViewModelResponseState.Error -> doNothing()
+                    is ViewModelResponseState.Success -> handleGroups(it.content)
+                }
+            }
+
             startTimer()
             timerState = TimerState.Running
         }
     }
 
-    // endregion
 
     private fun handleGroups(groups: List<Group>){
         binding.rvGroups.adapter = adapter
@@ -149,7 +167,7 @@ class MainFragment: Fragment() {
     }
 
     private fun initTimer(){
-        timerState = PrefUtil.getTimerState(this.context!!)
+        timerState = TimerPreferences.getTimerState(this.context!!)
 
         //we don't want to change the length of the timer which is already running
         //if the length was changed in settings while it was backgrounded
@@ -159,11 +177,11 @@ class MainFragment: Fragment() {
             setPreviousTimerLength()
 
         secondsRemaining = if (timerState == TimerState.Running || timerState == TimerState.Paused)
-            PrefUtil.getSecondsRemaining(this.context!!)
+            TimerPreferences.getSecondsRemaining(this.context!!)
         else
             timerLengthSeconds
 
-        val alarmSetTime = PrefUtil.getAlarmSetTime(this.context!!)
+        val alarmSetTime = TimerPreferences.getAlarmSetTime(this.context!!)
         if (alarmSetTime > 0)
             secondsRemaining -= nowSeconds - alarmSetTime
 
@@ -182,7 +200,7 @@ class MainFragment: Fragment() {
         //if the length was changed when the timer was running
         setNewTimerLength()
 
-        PrefUtil.setSecondsRemaining(timerLengthSeconds, this.context!!)
+        TimerPreferences.setSecondsRemaining(timerLengthSeconds, this.context!!)
         secondsRemaining = timerLengthSeconds
 
         updateCountdownUI()
@@ -202,12 +220,12 @@ class MainFragment: Fragment() {
     }
 
     private fun setNewTimerLength(){
-        val lengthInMinutes = PrefUtil.getTimerLength(this.context!!)
+        val lengthInMinutes = TimerPreferences.getTimerLength(this.context!!)
         timerLengthSeconds = (lengthInMinutes * 60L)
     }
 
     private fun setPreviousTimerLength(){
-        timerLengthSeconds = PrefUtil.getPreviousTimerLengthSeconds(this.context!!)
+        timerLengthSeconds = TimerPreferences.getPreviousTimerLengthSeconds(this.context!!)
     }
 
     private fun updateCountdownUI(){
@@ -226,7 +244,7 @@ class MainFragment: Fragment() {
             intent.action = Constants.ACTION_START
             val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
-            PrefUtil.setAlarmSetTime(nowSeconds, context)
+            TimerPreferences.setAlarmSetTime(nowSeconds, context)
             return wakeUpTime
         }
 
@@ -235,7 +253,7 @@ class MainFragment: Fragment() {
             val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.cancel(pendingIntent)
-            PrefUtil.setAlarmSetTime(0, context)
+            TimerPreferences.setAlarmSetTime(0, context)
         }
 
         val nowSeconds: Long
