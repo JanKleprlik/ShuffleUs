@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
+        <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3828125" />
+        <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/drawable/ic_baseline_close_24_white.xml" value="0.3828125" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/drawable/ic_play_arrow.xml" value="0.2064814814814815" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/activity_settings.xml" value="0.1" />
-        <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/fragment_add_player.xml" value="0.1" />
+        <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/fragment_add_player.xml" value="0.33" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/fragment_main.xml" value="0.33" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/fragment_settings.xml" value="0.33" />
         <entry key="..\:/Development/Android/ShuffleUs - kopie/app/src/main/res/layout/group_item_default.xml" value="0.4426002766251729" />

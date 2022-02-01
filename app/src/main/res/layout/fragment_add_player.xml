@@ -16,8 +16,11 @@
             android:layout_height="?attr/actionBarSize"
             android:paddingEnd="16dp"
             android:paddingStart="6dp"
+            app:titleTextColor="@color/white"
             app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_baseline_close_24" />
+            app:navigationIcon="@drawable/ic_baseline_close_24_white"
+            app:subtitleTextColor="@color/white"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
