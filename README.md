@@ -25,8 +25,8 @@ In order to create new groups just hit the ***shuffle*** button on the main page
 
 Hitting the ***shuffle*** button again will stop and reset the timer.
 <p align="center">
-    <img src="docs/imgs/main_2.png" alt="main page" width="200"/>
-    <img src="docs/imgs/main_4.png" alt="main page" width="200"/>
+    <img src="docs/imgs/main_2.png" alt="main page" width="300"/>
+    <img src="docs/imgs/main_4.png" alt="main page" width="300"/>
 </p>
 
 > One group distribution with groups of size two and one with groups of size four. 
@@ -34,7 +34,7 @@ Hitting the ***shuffle*** button again will stop and reset the timer.
 After the time interval expires a notification is issued. Right in the notification the timer can be reseted without changing the groups.
 
 <p align="center">
-    <img src="docs/imgs/notification.png" alt="notification" width="200"/>
+    <img src="docs/imgs/notification.png" alt="notification" width="400"/>
 </p>
 
 
@@ -47,6 +47,6 @@ Adding players is done via *add* button at the bottom of the screen. Dialog is i
 > The picture is downloaded automatically at random from the internet.
 
 <p align="center">
-    <img src="docs/imgs/settings.png" alt="settings page" width="200"/>
-    <img src="docs/imgs/add_player.png" alt="settings page" width="200"/>
+    <img src="docs/imgs/settings.png" alt="settings page" width="300"/>
+    <img src="docs/imgs/add_player.png" alt="settings page" width="300"/>
 </p>
