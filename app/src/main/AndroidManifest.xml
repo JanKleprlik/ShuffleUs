@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shuffleus.app">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -27,6 +29,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".settings.SettingsActivity"/>
         </activity>
+
+        <receiver
+            android:name="com.shuffleus.app.utils.TimerExpiredReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="start" />
+                <action android:name="restart" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

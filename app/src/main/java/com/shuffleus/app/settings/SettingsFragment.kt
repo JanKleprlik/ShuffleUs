@@ -24,7 +24,7 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
     private val binding: FragmentSettingsBinding
         get() = _binding!!
 
-    private val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModel>()
+    private val settingsViewModel by viewModels<SettingsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

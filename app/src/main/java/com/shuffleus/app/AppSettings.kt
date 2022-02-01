@@ -46,7 +46,7 @@ class AppSettings(private val context: Context) {
      * Read last groupname from preferences
      */
     suspend fun getGroupnamesIdx(): Int = context.dataStore.data.map { preferences ->
-        preferences[KEY_GROUPNAMES_IDX] ?: 0
+        preferences[KEY_GROUPNAMES_IDX] ?: 1
     }.first()
 
     /**
