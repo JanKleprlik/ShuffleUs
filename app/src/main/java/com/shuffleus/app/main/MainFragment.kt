@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.databinding.FragmentMainBinding
+import com.shuffleus.app.schedule.ScheduleActivity
 import com.shuffleus.app.settings.SettingsActivity
 import com.shuffleus.app.utils.Constants
 import com.shuffleus.app.utils.TimerPreferences
@@ -92,6 +93,11 @@ class MainFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.btnList.setOnClickListener{
             val intent = Intent(activity, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnSchedule.setOnClickListener{
+            val intent = Intent(activity, ScheduleActivity::class.java)
             startActivity(intent)
         }
 

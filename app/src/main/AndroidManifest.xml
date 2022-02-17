@@ -30,6 +30,14 @@
                 android:value=".settings.SettingsActivity"/>
         </activity>
 
+        <activity
+            android:name=".schedule.ScheduleActivity"
+            android:parentActivityName=".main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".schedule.ScheduleActivity"/>
+        </activity>
+
         <receiver
             android:name="com.shuffleus.app.utils.TimerExpiredReceiver"
             android:enabled="true"

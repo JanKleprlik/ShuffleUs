@@ -27,6 +27,22 @@
         <entry key="..\:/Development/Android/ShuffleUs/app/src/main/res/layout/user_item_settings.xml" value="0.36666666666666664" />
         <entry key="..\:/Development/Android/ShuffleUs/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1712962962962963" />
         <entry key="..\:/Development/Android/ShuffleUs/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1712962962962963" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/drawable/dark_blue_with_border.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/activity_schedule.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/activity_settings.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_add_lecture.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_add_player.xml" value="0.1" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_lecture.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_main.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_schedule.xml" value="0.22" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/fragment_settings.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/group_item_default.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/group_name.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/lecture_item.xml" value="0.22" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/test.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/user_item_default.xml" value="0.1796875" />
+        <entry key="..\:/Users/Bob/AndroidStudioProjects/ShuffleUs/app/src/main/res/layout/user_item_settings.xml" value="0.1796875" />
       </map>
     </option>
   </component>

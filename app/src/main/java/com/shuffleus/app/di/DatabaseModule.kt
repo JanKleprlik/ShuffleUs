@@ -4,6 +4,7 @@ package com.shuffleus.app.di
 import android.content.Context
 import com.shuffleus.app.repository.room.AppDatabase
 import com.shuffleus.app.repository.room.GroupNamesDao
+import com.shuffleus.app.repository.room.LectureDao
 import com.shuffleus.app.repository.room.UserDao
 
 import dagger.Module
@@ -26,6 +27,11 @@ class DatabaseModule {
     @Provides
     fun provideUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.userDao()
+    }
+
+    @Provides
+    fun provideLectureDao(appDatabase: AppDatabase): LectureDao {
+        return appDatabase.lectureDao()
     }
 
     @Provides

@@ -4,15 +4,17 @@ import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.shuffleus.app.data.GroupNames
+import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.data.User
 import com.shuffleus.app.utils.Converters
 import com.shuffleus.app.utils.ioThread
 
-@Database(entities = [User::class, GroupNames::class], version = 1)
+@Database(entities = [Lecture::class,User::class, GroupNames::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun groupNamesDao() : GroupNamesDao
+    abstract fun lectureDao() : LectureDao
 
     companion object {
 
@@ -33,6 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // insert the data on the IO Thread
                         ioThread {
                             getInstance(context).userDao().insertAll(*USER_DATA.toTypedArray())
+                            getInstance(context).lectureDao().insertAll(*LECTURE_DATA.toTypedArray())
                             getInstance(context).groupNamesDao().insertAll(*GROUP_NAMES_DATA.toTypedArray())
                         }
                     }
@@ -40,6 +43,9 @@ abstract class AppDatabase : RoomDatabase() {
                 .allowMainThreadQueries()
                 .build()
 
+        val LECTURE_DATA = listOf(
+            Lecture(0,720,810,"s1","l1",true,"S4","NSWI150")
+        )
         val USER_DATA = listOf(
 
             User(name="Me", surname = "Myself & I", isActive = true ),
