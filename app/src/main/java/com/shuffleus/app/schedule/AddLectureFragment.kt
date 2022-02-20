@@ -1,8 +1,14 @@
-package com.shuffleus.app.schedule;
+package com.shuffleus.app.schedule
 
+import android.Manifest
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +19,7 @@ import android.widget.TableLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.tabs.TabItem
 import com.shuffleus.app.R
@@ -22,9 +29,12 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.shuffleus.app.utils.CallbackListener
 import com.shuffleus.app.utils.LectureCallbackListener
+import java.io.File
+import java.lang.Exception
 
 
-public class AddLectureFragment (private val callbackListener: LectureCallbackListener) : DialogFragment(){
+class AddLectureFragment (private val callbackListener: LectureCallbackListener) : DialogFragment(){
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,10 +48,79 @@ public class AddLectureFragment (private val callbackListener: LectureCallbackLi
         return dialog
     }
 
+    override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val addBtn = view.findViewById<Button>(R.id.btnAdd)
+        addBtn.setOnClickListener{
+            val lecture = getNewLecture(view)
+            if(lecture == null){
+                Toast.makeText(activity, "Please fill at least start and finish time", Toast.LENGTH_LONG).show()
+            }
+            else {
+                Toast.makeText(activity, "Lecture added", Toast.LENGTH_LONG).show()
+                callbackListener.onLectureAdded(lecture)
+            }
+        }
+
+        val doneBtn = view.findViewById<Button>(R.id.btnBack)
+        doneBtn.setOnClickListener{
+            dismiss()
+        }
+
+        val deleteBtn = view.findViewById<Button>(R.id.btnRemove)
+        deleteBtn.setOnClickListener{
+            callbackListener.onLecturesDeleted()
+            dismiss()
+        }
+
+        val csvBtn = view.findViewById<Button>(R.id.btnCsv)
+        csvBtn.setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
+        }
+    }
+
+    // Here we get result of user interaction - user finds CSV file
+    // we extract information about lectures and add them
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 777) {
+            var fileName = data?.data?.path
+            fileName = fileName!!.split(":")[1]
+            try {
+                val lines: MutableList<String> = File(fileName).readLines(Charsets.ISO_8859_1) as MutableList<String>
+                lines.removeFirst()
+                lines.forEach { line -> addLectureFromCsvLine(line) }
+            }
+            catch(ex:Exception){
+                Log.e("CSV",ex.message.toString())
+            }
+        }
+    }
+
+    // Interpreting single line of CSV file as one lecture information
+    private fun addLectureFromCsvLine(line :String){
+        val tokens : List<String> =  line.split(";")
+        callbackListener.onLectureAdded(Lecture(
+            tokens[4].toInt()-1,
+            tokens[5].toInt(),
+            tokens[5].toInt()+ tokens[7].toInt(),
+            tokens[3],
+            tokens[12],
+            tokens[1][tokens[1].length-2]=='p',
+            tokens[6],
+            tokens[2],
+        ))
+    }
+
     override fun getTheme(): Int {
         return R.style.DialogTheme
     }
-
 
     private fun checkHours(hours : Int) :Boolean{
         return hours in 0..23
@@ -68,55 +147,48 @@ public class AddLectureFragment (private val callbackListener: LectureCallbackLi
         } catch (e: NumberFormatException) {
             return false
         }
-
         return true
     }
 
+    //Gets user input from provided views and builds lecture. Only start and end times are required
     private fun getNewLecture(view:View) : Lecture? {
-
         val endText = view.findViewById<EditText>(R.id.ettEnd)
         val startText = view.findViewById<EditText>(R.id.ettStart)
 
         val startArray : List<String> = startText.text.split(":")
         val endArray : List<String> = endText.text.split(":")
+
         if(!checkLectureTime(startArray,endArray)){
             return null
         }
-        val lectureTeacher : String = view.findViewById<EditText>(R.id.etLecturer).text.toString()
-        val lectureCode : String = view.findViewById<EditText>(R.id.etCode).text.toString()
-        val lectureRoom : String = view.findViewById<EditText>(R.id.etRoom).text.toString()
-        val lectureName : String = view.findViewById<EditText>(R.id.etSubject).text.toString()
-        val lectureTalk : Boolean = view.findViewById<SwitchCompat>(R.id.sLection).isChecked
 
-
+        val lectureTeacher = view.findViewById<EditText>(R.id.etLecturer)
+        val lectureCode = view.findViewById<EditText>(R.id.etCode)
+        val lectureRoom= view.findViewById<EditText>(R.id.etRoom)
+        val lectureName = view.findViewById<EditText>(R.id.etSubject)
+        val lectureTalk = view.findViewById<SwitchCompat>(R.id.sLection)
 
         val lectureStart : Int =  60 * startArray[0].toInt() + startArray[1].toInt()
         val lectureEnd : Int =  60 * endArray[0].toInt() + endArray[1].toInt()
         val tlWeekday = view.findViewById<TabLayout>(R.id.tlWeekday)
 
-        return Lecture(tlWeekday.selectedTabPosition,lectureStart,lectureEnd,lectureName,lectureTeacher,lectureTalk,lectureRoom,lectureCode)
+        val lec = Lecture(
+            tlWeekday.selectedTabPosition,
+            lectureStart,
+            lectureEnd,
+            lectureName.text.toString(),
+            lectureTeacher.text.toString(),
+            lectureTalk.isChecked,
+            lectureRoom.text.toString(),
+            lectureCode.text.toString())
+
+        endText.text.clear()
+        startText.text.clear()
+        lectureName.text.clear()
+        lectureCode.text.clear()
+        lectureTeacher.text.clear()
+        lectureRoom.text.clear()
+        return lec
     }
 
-    override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val addBtn = view.findViewById<Button>(R.id.btnAdd)
-        addBtn.setOnClickListener{
-            val lecture = getNewLecture(view)
-            if(lecture == null){
-                //todo error message
-            }
-            else {
-                callbackListener.onLectureAdded(lecture)
-                dismiss()
-            }
-        }
-
-        val deleteBtn = view.findViewById<Button>(R.id.btnRemove)
-        deleteBtn.setOnClickListener{
-
-                callbackListener.onLecturesDeleted()
-                dismiss()
-        }
-    }
 }

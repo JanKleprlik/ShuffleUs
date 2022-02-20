@@ -10,25 +10,25 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/done"
+        app:layout_constraintBottom_toTopOf="@+id/btnCsv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
 
     <Button
         android:id="@+id/btnRemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove all"
+        android:text="@string/remove_all"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etSubject"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Jméno předmětu"
+        android:hint="@string/jm_no_p_edm_tu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
         android:id="@+id/etLecturer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Vyučující"
+        android:hint="@string/vyu_uj_c"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etSubject" />
@@ -46,7 +46,7 @@
         android:id="@+id/etRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Kód učebny"
+        android:hint="@string/k_d_u_ebny"
         app:layout_constraintStart_toEndOf="@+id/etCode"
         app:layout_constraintTop_toBottomOf="@+id/etLecturer" />
 
@@ -54,7 +54,7 @@
         android:id="@+id/etCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Kód předmětu"
+        android:hint="@string/k_d_p_edm_tu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etLecturer" />
 
@@ -62,7 +62,7 @@
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlWeekday" />
@@ -71,17 +71,15 @@
         android:id="@+id/btnCsv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Read from csv file"
+        android:text="@string/read_from_csv_file"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnBack"
-        app:layout_constraintStart_toEndOf="@+id/btnRemove"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/ettStart"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Start time"
+        android:hint="@string/start_time"
         android:inputType="time"
         app:layout_constraintEnd_toStartOf="@+id/ettEnd"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="End time"
+        android:hint="@string/end_time"
         android:inputType="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCode" />
@@ -101,7 +99,7 @@
         android:id="@+id/sLection"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="Přednáška"
+        android:text="@string/p_edn_ka"
         app:layout_constraintBottom_toTopOf="@+id/ettEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etLecturer" />
@@ -118,35 +116,35 @@
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pondělí" />
+            android:text="@string/pond_l" />
 
         <com.google.android.material.tabs.TabItem
             android:singleLine="true"
             android:id="@+id/DayTuesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Úterý" />
+            android:text="@string/ter" />
 
         <com.google.android.material.tabs.TabItem
             android:singleLine="true"
             android:id="@+id/DayWednesday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Středa" />
+            android:text="@string/streda" />
 
         <com.google.android.material.tabs.TabItem
             android:singleLine="true"
             android:id="@+id/DayThursday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Čtvrtek" />
+            android:text="@string/ctvrtek" />
 
         <com.google.android.material.tabs.TabItem
             android:singleLine="true"
             android:id="@+id/DayFriday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pátek" />
+            android:text="@string/patek" />
     </com.google.android.material.tabs.TabLayout>
 
 

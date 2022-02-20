@@ -3,8 +3,9 @@
     package="com.shuffleus.app">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <application
+    <application android:requestLegacyExternalStorage="true"
         android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
