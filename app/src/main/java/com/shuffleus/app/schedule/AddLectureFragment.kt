@@ -27,6 +27,8 @@ import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.data.User
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.shuffleus.app.databinding.FragmentAddLectureBinding
+import com.shuffleus.app.databinding.FragmentAddPlayerBinding
 import com.shuffleus.app.utils.CallbackListener
 import com.shuffleus.app.utils.LectureCallbackListener
 import java.io.File
@@ -35,11 +37,17 @@ import java.lang.Exception
 
 class AddLectureFragment (private val callbackListener: LectureCallbackListener) : DialogFragment(){
 
+    // MVVM
+    private var _binding: FragmentAddLectureBinding? = null
+    private val binding: FragmentAddLectureBinding
+        get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_add_lecture, container, false)
+        _binding = FragmentAddLectureBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -51,7 +59,7 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
     override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val addBtn = view.findViewById<Button>(R.id.btnAdd)
+        val addBtn = binding.btnAdd
         addBtn.setOnClickListener{
             val lecture = getNewLecture(view)
             if(lecture == null){
@@ -63,18 +71,18 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
             }
         }
 
-        val doneBtn = view.findViewById<Button>(R.id.btnBack)
+        val doneBtn = binding.btnBack
         doneBtn.setOnClickListener{
             dismiss()
         }
 
-        val deleteBtn = view.findViewById<Button>(R.id.btnRemove)
+        val deleteBtn = binding.btnRemove
         deleteBtn.setOnClickListener{
             callbackListener.onLecturesDeleted()
             dismiss()
         }
 
-        val csvBtn = view.findViewById<Button>(R.id.btnCsv)
+        val csvBtn = binding.btnCsv
         csvBtn.setOnClickListener {
             val intent = Intent()
                 .setType("*/*")
@@ -152,8 +160,8 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
 
     //Gets user input from provided views and builds lecture. Only start and end times are required
     private fun getNewLecture(view:View) : Lecture? {
-        val endText = view.findViewById<EditText>(R.id.ettEnd)
-        val startText = view.findViewById<EditText>(R.id.ettStart)
+        val endText = binding.ettEnd
+        val startText = binding.ettStart
 
         val startArray : List<String> = startText.text.split(":")
         val endArray : List<String> = endText.text.split(":")
@@ -162,15 +170,15 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
             return null
         }
 
-        val lectureTeacher = view.findViewById<EditText>(R.id.etLecturer)
-        val lectureCode = view.findViewById<EditText>(R.id.etCode)
-        val lectureRoom= view.findViewById<EditText>(R.id.etRoom)
-        val lectureName = view.findViewById<EditText>(R.id.etSubject)
-        val lectureTalk = view.findViewById<SwitchCompat>(R.id.sLection)
+        val lectureTeacher = binding.etLecturer
+        val lectureCode = binding.etCode
+        val lectureRoom= binding.etRoom
+        val lectureName = binding.etSubject
+        val lectureTalk = binding.sLection
 
         val lectureStart : Int =  60 * startArray[0].toInt() + startArray[1].toInt()
         val lectureEnd : Int =  60 * endArray[0].toInt() + endArray[1].toInt()
-        val tlWeekday = view.findViewById<TabLayout>(R.id.tlWeekday)
+        val tlWeekday = binding.tlWeekday
 
         val lec = Lecture(
             tlWeekday.selectedTabPosition,

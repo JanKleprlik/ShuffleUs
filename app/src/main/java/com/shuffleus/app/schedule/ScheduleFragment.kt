@@ -19,6 +19,8 @@ import org.w3c.dom.Text
 import android.view.WindowManager
 import androidx.core.view.allViews
 import androidx.lifecycle.lifecycleScope
+import com.shuffleus.app.databinding.LectureItemBinding
+import com.shuffleus.app.databinding.TimeItemBinding
 import kotlinx.coroutines.launch
 
 
@@ -161,9 +163,11 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
             minutes = formatMinutes(minutes)
 
             val inflater = LayoutInflater.from(this.context)
+
+            val itemBinder = TimeItemBinding.inflate(inflater, null, false)
             val timeView = inflater.inflate(R.layout.time_item, null, false)
 
-            timeView.findViewById<TextView>(R.id.tvTime).text =hours.plus(":").plus(minutes)
+            itemBinder.tvTime.text = hours.plus(":").plus(minutes)
 
             timeView.x = timeToXCoordinate(current)
             timeView.y = 0.toFloat()
@@ -216,15 +220,17 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
         val inflater = LayoutInflater.from(this.context)
         val lec = inflater.inflate(R.layout.lecture_item, null, false)
 
-        lec.findViewById<TextView>(R.id.tvLectureLecturer).text = item.lecturer
-        lec.findViewById<TextView>(R.id.tvLectureCode).text = item.code
-        lec.findViewById<TextView>(R.id.tvLectureRoom).text = item.room
-        lec.findViewById<TextView>(R.id.tvLectureSubject).text = item.subject
+        val itemBinder = LectureItemBinding.inflate(inflater, null, false)
+
+        itemBinder.tvLectureLecturer.text = item.lecturer
+        itemBinder.tvLectureCode.text = item.code
+        itemBinder.tvLectureRoom.text = item.room
+        itemBinder.tvLectureSubject.text = item.subject
 
         val hours = (item.startTime/60).toString()
         var minutes = (item.startTime%60).toString()
         minutes = formatMinutes(minutes)
-        lec.findViewById<TextView>(R.id.tvLectureTime).text = hours.plus(":").plus(minutes)
+        itemBinder.tvLectureTime.text = hours.plus(":").plus(minutes)
 
         lec.x = timeToXCoordinate(item.startTime)
         lec.y = (height*0.95/5*item.day+height/20).toFloat()

@@ -11,11 +11,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
+import com.shuffleus.app.databinding.UserItemDefaultBinding
+import com.shuffleus.app.databinding.UserItemSettingsBinding
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
 import kotlinx.coroutines.launch
 
 class UsersAdapter(users: List<User>, private val callbackListener: SettingsFragment): RecyclerView.Adapter<UserViewHolder>(){
+
+    // MVVM
+    private var _binding: UserItemSettingsBinding? = null
+    private val binding: UserItemSettingsBinding
+        get() = _binding!!
 
     var users = users
         set(value) {
@@ -24,9 +31,9 @@ class UsersAdapter(users: List<User>, private val callbackListener: SettingsFrag
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item_settings, parent, false)
+        _binding = UserItemSettingsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return UserViewHolder(view, callbackListener)
+        return UserViewHolder(binding, callbackListener)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
@@ -38,14 +45,14 @@ class UsersAdapter(users: List<User>, private val callbackListener: SettingsFrag
     }
 }
 
-class UserViewHolder(private val view: View, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(view){
+class UserViewHolder(private val binding: UserItemSettingsBinding, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(binding.root){
     private val repository: Repository by lazy { RoomRepository(callbackListener.activity!!.application) }
 
-    var txtName: TextView = view.findViewById(R.id.txt_name)
-    var txtSurname: TextView = view.findViewById(R.id.txt_surname)
-    var btnIsActive: CheckBox = view.findViewById(R.id.btn_isActive)
-    var btnDelete: Button = view.findViewById(R.id.btn_delete)
-    var imgAvatar: ImageView = view.findViewById(R.id.img_avatar)
+    var txtName: TextView = binding.txtName
+    var txtSurname: TextView = binding.txtSurname
+    var btnIsActive: CheckBox = binding.btnIsActive
+    var btnDelete: Button = binding.btnDelete
+    var imgAvatar: ImageView = binding.imgAvatar
 
     fun bind(user: User, adapter: UsersAdapter){
         txtName.text = user.name
@@ -73,7 +80,7 @@ class UserViewHolder(private val view: View, private val callbackListener: Setti
             callbackListener.onPlayerDeleted(user);
         }
 
-        Glide.with(view)
+        Glide.with(binding.root)
             .load("https://picsum.photos/64/64")
             .apply(RequestOptions.circleCropTransform()
                 .signature(ObjectKey("${user.name}_${user.surname}")))

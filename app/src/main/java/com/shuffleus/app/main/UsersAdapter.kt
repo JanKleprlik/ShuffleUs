@@ -11,10 +11,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
+import com.shuffleus.app.databinding.LectureItemBinding
+import com.shuffleus.app.databinding.UserItemDefaultBinding
+import com.shuffleus.app.schedule.LectureViewHolder
 import com.shuffleus.app.utils.inflate
 
 class UsersAdapter(): RecyclerView.Adapter<UserViewHolder>(){
 
+    // MVVM
+    private var _binding: UserItemDefaultBinding? = null
+    private val binding: UserItemDefaultBinding
+        get() = _binding!!
 
     var users = emptyList<User>()
         set(value) {
@@ -22,8 +29,10 @@ class UsersAdapter(): RecyclerView.Adapter<UserViewHolder>(){
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder =
-        UserViewHolder(parent.inflate(R.layout.user_item_default))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        _binding = UserItemDefaultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return UserViewHolder(binding)
+    }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         holder.bind(users[position])
@@ -34,17 +43,16 @@ class UsersAdapter(): RecyclerView.Adapter<UserViewHolder>(){
     }
 }
 
-class UserViewHolder(view: View): RecyclerView.ViewHolder(view){
+class UserViewHolder(private val binding: UserItemDefaultBinding): RecyclerView.ViewHolder(binding.root){
 
-    var view = view
-    var txtName: TextView = view.findViewById(R.id.txt_name_def)
-    var txtSurname: TextView = view.findViewById(R.id.txt_surname_def)
-    var imgAvatar: ImageView = view.findViewById(R.id.img_avatar)
+    var txtName: TextView = binding.txtNameDef
+    var txtSurname: TextView = binding.txtSurnameDef
+    var imgAvatar: ImageView = binding.imgAvatar
 
     fun bind(user: User){
         txtName.text = user.name
         txtSurname.text = user.surname
-        Glide.with(view)
+        Glide.with(binding.root)
             .load("https://picsum.photos/64/64")
             .apply(
                 RequestOptions.circleCropTransform()

@@ -10,11 +10,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.Lecture
+import com.shuffleus.app.databinding.FragmentAddPlayerBinding
+import com.shuffleus.app.databinding.LectureItemBinding
 import com.shuffleus.app.repository.LectureRepository
 import com.shuffleus.app.repository.room.LectureRoomRepository
 import com.shuffleus.app.repository.room.RoomRepository
 
 class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureViewHolder>(){
+
+    // MVVM
+    private var _binding: LectureItemBinding? = null
+    private val binding: LectureItemBinding
+        get() = _binding!!
 
     var lectures = lectures
         set(value) {
@@ -23,9 +30,8 @@ class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureView
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LectureViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.lecture_item, parent, false)
-
-        return LectureViewHolder(view)
+        _binding = LectureItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LectureViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: LectureViewHolder, position: Int) {
@@ -37,14 +43,13 @@ class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureView
     }
 }
 
-class LectureViewHolder(private val view: View): RecyclerView.ViewHolder(view){
-    //private val repository: LectureRepository by lazy { LectureRoomRepository(view.context) }
+class LectureViewHolder(private val binding: LectureItemBinding): RecyclerView.ViewHolder(binding.root){
 
-    var tvLectureCode: TextView = view.findViewById(R.id.tvLectureCode)
-    var tvLectureLecturer: TextView = view.findViewById(R.id.tvLectureLecturer)
-    var tvLectureRoom: TextView = view.findViewById(R.id.tvLectureRoom)
-    var tvLectureSubject: TextView = view.findViewById(R.id.tvLectureSubject)
-    var tvLectureTime: TextView = view.findViewById(R.id.tvLectureTime)
+    var tvLectureCode: TextView = binding.tvLectureCode
+    var tvLectureLecturer: TextView = binding.tvLectureLecturer
+    var tvLectureRoom: TextView = binding.tvLectureRoom
+    var tvLectureSubject: TextView = binding.tvLectureSubject
+    var tvLectureTime: TextView = binding.tvLectureTime
 
 
     fun bind(lecture: Lecture, adapter: LecturesAdapter){
