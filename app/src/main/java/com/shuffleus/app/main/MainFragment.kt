@@ -62,11 +62,11 @@ class MainFragment: Fragment() {
         lifecycleScope.launch{
             val time = mainViewModel.getTimeInMillis().toLong()
             val timeInMinutes = (time / (1000 * 60)).toInt()
-            TimerPreferences.setTimerLength(timeInMinutes, context!!)
+            TimerPreferences.setTimerLength(timeInMinutes, requireContext())
         }
         // update timer if necessary
         initTimer()
-        removeAlarm(this.context!!)
+        removeAlarm(requireContext())
 
         lifecycleScope.launch {
             // visualize groups but do not change seed on resume
@@ -89,13 +89,13 @@ class MainFragment: Fragment() {
         // cancel timer and set an alarm
         if (timerState == TimerState.Running){
             timer.cancel()
-            setAlarm(this.context!!, nowSeconds, secondsRemaining)
+            setAlarm(requireContext(), nowSeconds, secondsRemaining)
         }
 
         // update times
-        TimerPreferences.setPreviousTimerLengthSeconds(timerLengthSeconds, this.context!!)
-        TimerPreferences.setSecondsRemaining(secondsRemaining, this.context!!)
-        TimerPreferences.setTimerState(timerState, this.context!!)
+        TimerPreferences.setPreviousTimerLengthSeconds(timerLengthSeconds, requireContext())
+        TimerPreferences.setSecondsRemaining(secondsRemaining, requireContext())
+        TimerPreferences.setTimerState(timerState, requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,7 +113,7 @@ class MainFragment: Fragment() {
             lifecycleScope.launch {
                 val time = mainViewModel.getTimeInMillis().toLong()
                 val timeInMinutes = (time / (1000 * 60)).toInt()
-                TimerPreferences.setTimerLength(timeInMinutes, context!!)
+                TimerPreferences.setTimerLength(timeInMinutes, requireContext())
                 doShuffle()
             }
         }
@@ -137,7 +137,7 @@ class MainFragment: Fragment() {
         {
             timer.cancel()
             timerState = TimerState.Stopped
-            removeAlarm(this.context!!)
+            removeAlarm(requireContext())
             onTimerFinished()
         }
         // Set new timer and update groups
@@ -181,7 +181,7 @@ class MainFragment: Fragment() {
     }
 
     private fun initTimer(){
-        timerState = TimerPreferences.getTimerState(this.context!!)
+        timerState = TimerPreferences.getTimerState(requireContext())
 
         //we don't want to change the length of the timer which is already running
         //if the length was changed in settings while it was backgrounded
@@ -191,11 +191,11 @@ class MainFragment: Fragment() {
             setPreviousTimerLength()
 
         secondsRemaining = if (timerState == TimerState.Running || timerState == TimerState.Paused)
-            TimerPreferences.getSecondsRemaining(this.context!!)
+            TimerPreferences.getSecondsRemaining(requireContext())
         else
             timerLengthSeconds
 
-        val alarmSetTime = TimerPreferences.getAlarmSetTime(this.context!!)
+        val alarmSetTime = TimerPreferences.getAlarmSetTime(requireContext())
         if (alarmSetTime > 0)
             secondsRemaining -= nowSeconds - alarmSetTime
 
@@ -214,7 +214,7 @@ class MainFragment: Fragment() {
         //if the length was changed when the timer was running
         setNewTimerLength()
 
-        TimerPreferences.setSecondsRemaining(timerLengthSeconds, this.context!!)
+        TimerPreferences.setSecondsRemaining(timerLengthSeconds, requireContext())
         secondsRemaining = timerLengthSeconds
 
         updateCountdownUI()
@@ -234,12 +234,12 @@ class MainFragment: Fragment() {
     }
 
     private fun setNewTimerLength(){
-        val lengthInMinutes = TimerPreferences.getTimerLength(this.context!!)
+        val lengthInMinutes = TimerPreferences.getTimerLength(requireContext())
         timerLengthSeconds = (lengthInMinutes * 60L)
     }
 
     private fun setPreviousTimerLength(){
-        timerLengthSeconds = TimerPreferences.getPreviousTimerLengthSeconds(this.context!!)
+        timerLengthSeconds = TimerPreferences.getPreviousTimerLengthSeconds(requireContext())
     }
 
     private fun updateCountdownUI(){
