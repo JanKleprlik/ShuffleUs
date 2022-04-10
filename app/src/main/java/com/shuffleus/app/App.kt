@@ -14,16 +14,14 @@ class App: Application() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                NOTIFICATION_CHANNEL_MAIN_ID,
-                NOTIFICATION_CHANNEL_MAIN_DESCRIPTION,
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = NOTIFICATION_CHANNEL_MAIN_DESCRIPTION
-            }
-            NotificationManagerCompat.from(this).createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_MAIN_ID,
+            NOTIFICATION_CHANNEL_MAIN_DESCRIPTION,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = NOTIFICATION_CHANNEL_MAIN_DESCRIPTION
         }
+        NotificationManagerCompat.from(this).createNotificationChannel(channel)
     }
 
     companion object {
