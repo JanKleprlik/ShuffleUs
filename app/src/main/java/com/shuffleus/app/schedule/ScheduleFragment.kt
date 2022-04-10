@@ -18,6 +18,8 @@ import com.shuffleus.app.utils.*
 import org.w3c.dom.Text
 import android.view.WindowManager
 import androidx.core.view.allViews
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 
 class ScheduleFragment : Fragment(), LectureCallbackListener {
@@ -49,12 +51,16 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
     }
 
     override fun onLectureAdded(newLecture: Lecture){
-        scheduleViewModel.addLecture(newLecture)
+        lifecycleScope.launch{
+            scheduleViewModel.addLecture(newLecture)
+        }
     }
 
     override fun onLecturesDeleted(){
         binding.rlLectures.removeAllViewsInLayout()
-        scheduleViewModel.deleteLectures()}
+        lifecycleScope.launchWhenCreated {
+            scheduleViewModel.deleteLectures()}
+        }
 
     override fun onStart() {
         super.onStart()
@@ -67,8 +73,9 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
                 is ViewModelResponseState.Success -> handleLectures(it.content)
             }
         }
-
-        scheduleViewModel.loadData()
+        lifecycleScope.launch {
+            scheduleViewModel.loadData()
+        }
     }
 
     // This function is called upon retriving information about lectures

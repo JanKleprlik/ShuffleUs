@@ -42,8 +42,8 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener, RemovePlayerCall
     }
 
     override fun onPlayerAdded(newUser:User){
-        settingsViewModel.addUser(newUser)
         lifecycleScope.launch{
+            settingsViewModel.addUser(newUser)
             val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
             groupSizePicker?.minValue = 2
             groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
@@ -62,6 +62,7 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener, RemovePlayerCall
      */
     override fun onPlayerDeleted(oldUser: User) {
         lifecycleScope.launch{
+            settingsViewModel.deleteUser(oldUser)
             val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
             groupSizePicker?.minValue = 2
             groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
@@ -89,8 +90,8 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener, RemovePlayerCall
 
         lifecycleScope.launch{
             preparePickers()
+            settingsViewModel.loadData()
         }
-        settingsViewModel.loadData()
     }
 
     override fun onDestroyView() {

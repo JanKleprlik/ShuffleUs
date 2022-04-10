@@ -8,6 +8,9 @@ import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.data.User
 import com.shuffleus.app.utils.Converters
 import com.shuffleus.app.utils.ioThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 @Database(entities = [Lecture::class,User::class, GroupNames::class], version = 1)
 @TypeConverters(Converters::class)
@@ -33,14 +36,15 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         // insert the data on the IO Thread
-                        ioThread {
+
+                        CoroutineScope(SupervisorJob()).launch {
                             getInstance(context).userDao().insertAll(*USER_DATA.toTypedArray())
                             getInstance(context).lectureDao().insertAll(*LECTURE_DATA.toTypedArray())
                             getInstance(context).groupNamesDao().insertAll(*GROUP_NAMES_DATA.toTypedArray())
                         }
+
                     }
                 })
-                .allowMainThreadQueries()
                 .build()
 
         val LECTURE_DATA = listOf(

@@ -26,6 +26,10 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         }
     }
 
+    suspend fun deleteUser(user: User){
+        repository.deleteUser(user)
+    }
+
     suspend fun getGroupNamesIdx() :Int{
         return appSettings.getGroupnamesIdx()
     }
@@ -56,15 +60,11 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         }
     }
 
-    fun getNumberOfActiveUsers(): Int {
-        return repository.getActiveUsers().size
-    }
-
-    fun getNumberOfRawActiveUsers(): Int {
+    suspend fun getNumberOfRawActiveUsers(): Int {
         return repository.getRawActiveUsers().size
     }
 
-    fun getNameTypes() : List<String> {
+    suspend fun getNameTypes() : List<String> {
         return repository.getGroupNames() as List<String>
     }
 
@@ -72,18 +72,18 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         return _allUsers
     }
 
-    fun addUser(user:User) {
+    suspend fun addUser(user:User) {
         repository.addUser(user)
         //Reload users
         loadUsers()
     }
 
-    fun loadData(){
+    suspend fun loadData(){
         _allUsers.postValue(ViewModelResponseState.Loading)
         loadUsers()
     }
 
-    private fun loadUsers(){
+    private suspend fun loadUsers(){
         _allUsers.postValue(ViewModelResponseState.Loading)
 
         val users = repository.getUsers()

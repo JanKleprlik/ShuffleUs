@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -12,9 +13,9 @@ import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
-import com.shuffleus.app.utils.RemovePlayerCallbackListener
+import kotlinx.coroutines.launch
 
-class UsersAdapter(users: List<User>, private val callbackListener: RemovePlayerCallbackListener): RecyclerView.Adapter<UserViewHolder>(){
+class UsersAdapter(users: List<User>, private val callbackListener: SettingsFragment): RecyclerView.Adapter<UserViewHolder>(){
 
     var users = users
         set(value) {
@@ -37,7 +38,7 @@ class UsersAdapter(users: List<User>, private val callbackListener: RemovePlayer
     }
 }
 
-class UserViewHolder(private val view: View, private val callbackListener: RemovePlayerCallbackListener): RecyclerView.ViewHolder(view){
+class UserViewHolder(private val view: View, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(view){
     private val repository: Repository by lazy { RoomRepository(view.context) }
 
     var txtName: TextView = view.findViewById(R.id.txt_name)
@@ -58,12 +59,17 @@ class UserViewHolder(private val view: View, private val callbackListener: Remov
             }
             user.isActive = user.isActive.not()
             user.wasChanged = true
-            repository.updateUser(user)
+
+            callbackListener.lifecycleScope.launch{
+                repository.updateUser(user)
+            }
         }
 
         btnDelete.setOnClickListener{
-            repository.deleteUser(user)
-            adapter.users = repository.getUsers()
+            callbackListener.lifecycleScope.launch{
+                repository.deleteUser(user)
+                adapter.users = repository.getUsers()
+            }
             callbackListener.onPlayerDeleted(user);
         }
 

@@ -29,24 +29,24 @@ class ScheduleViewModel(app:Application): AndroidViewModel(app) {
         return _allLectures
     }
 
-    fun addLecture(lecture:Lecture) {
+    suspend fun addLecture(lecture:Lecture) {
         repository.addLecture(lecture)
         //Reload lectures
         loadLectures()
     }
 
-    fun deleteLectures(){
-        repository.deleteLectures()
+    suspend fun deleteLectures(){
+        repository.run { deleteLectures() }
         //Reload lectures
         loadLectures()
     }
 
-    fun loadData(){
+    suspend fun loadData(){
         _allLectures.postValue(ViewModelResponseState.Loading)
         loadLectures()
     }
 
-    private fun loadLectures(){
+    private suspend fun loadLectures(){
         _allLectures.postValue(ViewModelResponseState.Loading)
 
         val lectures = repository.getLectures()

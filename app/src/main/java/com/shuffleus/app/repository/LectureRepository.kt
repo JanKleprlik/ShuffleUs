@@ -9,16 +9,16 @@ interface LectureRepository
     /**
      * Get all lectures.
      */
-    fun getLectures(): List<Lecture>
+    suspend fun getLectures(): List<Lecture>
 
     /**
      * Delete all lectures.
      */
-    fun deleteLectures(): Unit
+    suspend fun deleteLectures(): Unit
 
     /**
      * Adds users into the DB.
      */
-    fun addLecture(vararg lectures: Lecture)
+    suspend fun addLecture(vararg lectures: Lecture)
 
 }

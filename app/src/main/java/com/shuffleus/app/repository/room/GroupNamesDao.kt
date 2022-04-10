@@ -7,15 +7,15 @@ import com.shuffleus.app.data.User
 @Dao
 interface GroupNamesDao {
     @Query("SELECT * FROM GroupNames")
-    fun getAll(): List<GroupNames>
+    suspend fun getAll(): List<GroupNames>
 
     @Query("SELECT name FROM GroupNames")
-    fun getNames(): List<String>
+    suspend fun getNames(): List<String>
 
     @Query("SELECT names FROM GroupNames WHERE name = :name")
-    fun getNamesByGroupName(name: String): String
+    suspend fun getNamesByGroupName(name: String): String
 
     @Insert
-    fun insertAll(vararg groupNames: GroupNames)
+    suspend fun insertAll(vararg groupNames: GroupNames)
     
 }

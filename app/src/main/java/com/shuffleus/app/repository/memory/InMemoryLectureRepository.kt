@@ -7,18 +7,18 @@ import com.shuffleus.app.repository.LectureRepository
 
 class InMemoryLectureRepository :LectureRepository {
 
-    override fun getLectures(): List<Lecture> {
+    override suspend fun getLectures(): List<Lecture> {
         return listOf(
             Lecture(0,720,810,"la","Hladík",true,"S4","nswi140")
         )
     }
 
-    override fun deleteLectures() {
+    override suspend fun deleteLectures() {
         throw NotImplementedError("Operation: deleteLecture is not implemented on MemoryRepository.")
     }
 
 
-    override fun addLecture(vararg lectures: Lecture) {
+    override suspend fun addLecture(vararg lectures: Lecture) {
         throw NotImplementedError("Operation: addLectures is not implemented on MemoryRepository.")
     }
 }

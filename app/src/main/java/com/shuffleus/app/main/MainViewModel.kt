@@ -69,12 +69,12 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
     }
 
 
-    fun loadData(){
+    suspend fun loadData(){
         _activeUsers.postValue(ViewModelResponseState.Loading)
         loadUsers()
     }
 
-    private fun loadUsers(){
+    private suspend fun loadUsers(){
         _activeUsers.postValue(ViewModelResponseState.Loading)
 
         val users = repository.getActiveUsers()

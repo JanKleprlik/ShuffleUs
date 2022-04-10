@@ -50,7 +50,9 @@ class MainFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        mainViewModel.loadData()
+        lifecycleScope.launch {
+            mainViewModel.loadData()
+        }
     }
 
     override fun onResume() {

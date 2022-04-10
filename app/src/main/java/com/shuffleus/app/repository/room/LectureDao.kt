@@ -7,12 +7,12 @@ import com.shuffleus.app.data.User
 @Dao
 interface LectureDao {
     @Query("SELECT * FROM lecture")
-    fun getAll(): List<Lecture>
+    suspend fun getAll(): List<Lecture>
 
     @Insert
-    fun insertAll(vararg lectures: Lecture)
+    suspend fun insertAll(vararg lectures: Lecture)
 
     @Query("DELETE FROM lecture")
-    fun delete()
+    suspend fun delete()
 
 }
