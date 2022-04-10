@@ -39,7 +39,6 @@ abstract class AppDatabase : RoomDatabase() {
 
                         CoroutineScope(SupervisorJob()).launch {
                             getInstance(context).userDao().insertAll(*USER_DATA.toTypedArray())
-                            getInstance(context).lectureDao().insertAll(*LECTURE_DATA.toTypedArray())
                             getInstance(context).groupNamesDao().insertAll(*GROUP_NAMES_DATA.toTypedArray())
                         }
 
@@ -47,9 +46,6 @@ abstract class AppDatabase : RoomDatabase() {
                 })
                 .build()
 
-        val LECTURE_DATA = listOf(
-            Lecture(0,720,810,"s1","l1",true,"S4","NSWI150")
-        )
         val USER_DATA = listOf(
 
             User(name="Me", surname = "Myself & I", isActive = true ),

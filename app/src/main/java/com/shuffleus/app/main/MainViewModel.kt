@@ -15,7 +15,7 @@ import kotlin.random.Random
 class MainViewModel(app:Application): AndroidViewModel(app) {
 
     //private val repository: Repository by lazy { InMemoryRepository() }
-    private val repository: Repository by lazy { RoomRepository(app.baseContext) }
+    private val repository: Repository by lazy { RoomRepository(app) }
 
     private val appSettings: AppSettings by lazy {
         AppSettings(app)

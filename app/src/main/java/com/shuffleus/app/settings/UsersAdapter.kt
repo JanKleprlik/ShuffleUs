@@ -39,7 +39,7 @@ class UsersAdapter(users: List<User>, private val callbackListener: SettingsFrag
 }
 
 class UserViewHolder(private val view: View, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(view){
-    private val repository: Repository by lazy { RoomRepository(view.context) }
+    private val repository: Repository by lazy { RoomRepository(callbackListener.activity!!.application) }
 
     var txtName: TextView = view.findViewById(R.id.txt_name)
     var txtSurname: TextView = view.findViewById(R.id.txt_surname)

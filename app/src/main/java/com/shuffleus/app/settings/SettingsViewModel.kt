@@ -1,12 +1,10 @@
 package com.shuffleus.app.settings
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import com.shuffleus.app.AppSettings
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
-import com.shuffleus.app.repository.memory.InMemoryRepository
 import com.shuffleus.app.repository.room.RoomRepository
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
@@ -14,7 +12,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(app:Application): AndroidViewModel(app) {
 
     //private val repository: Repository by lazy { InMemoryRepository() }
-    private val repository: Repository by lazy { RoomRepository(app.baseContext) }
+    private val repository: Repository by lazy { RoomRepository(app) }
 
     private val appSettings: AppSettings by lazy {
         AppSettings(app)

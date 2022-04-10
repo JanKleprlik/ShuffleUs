@@ -1,14 +1,13 @@
 package com.shuffleus.app.repository.room
 
 import android.app.Application
-import android.content.Context
-import com.shuffleus.app.data.Group
+import com.shuffleus.app.App
 import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
 
-class RoomRepository(context: Context): Repository {
-    val db = AppDatabase.getInstance(context)
+class RoomRepository(app: Application): Repository {
+    val db = AppDatabase.getInstance(app.baseContext)
 
     override suspend fun getActiveUsers(): List<User> {
         return db.userDao().getActiveUsers()
