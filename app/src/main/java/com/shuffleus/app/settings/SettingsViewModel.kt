@@ -29,6 +29,7 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
     suspend fun getGroupNamesIdx() :Int{
         return appSettings.getGroupnamesIdx()
     }
+
     suspend fun getGroupSize() : Int{
         return appSettings.getGroupSize()
     }

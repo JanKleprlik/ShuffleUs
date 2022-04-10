@@ -9,3 +9,7 @@ interface CallbackListener{
 interface AddPlayerCallbackListener : CallbackListener {
     fun onPlayerAdded(player: User)
 }
+
+interface RemovePlayerCallbackListener : CallbackListener {
+    fun onPlayerDeleted(player: User)
+}

@@ -6,17 +6,15 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
-import com.shuffleus.app.main.MainFragment
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
-import java.security.Signature
+import com.shuffleus.app.utils.RemovePlayerCallbackListener
 
-class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
+class UsersAdapter(users: List<User>, private val callbackListener: RemovePlayerCallbackListener): RecyclerView.Adapter<UserViewHolder>(){
 
     var users = users
         set(value) {
@@ -27,7 +25,7 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item_settings, parent, false)
 
-        return UserViewHolder(view)
+        return UserViewHolder(view, callbackListener)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
@@ -39,7 +37,7 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
     }
 }
 
-class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
+class UserViewHolder(private val view: View, private val callbackListener: RemovePlayerCallbackListener): RecyclerView.ViewHolder(view){
     private val repository: Repository by lazy { RoomRepository(view.context) }
 
     var txtName: TextView = view.findViewById(R.id.txt_name)
@@ -66,6 +64,7 @@ class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
         btnDelete.setOnClickListener{
             repository.deleteUser(user)
             adapter.users = repository.getUsers()
+            callbackListener.onPlayerDeleted(user);
         }
 
         Glide.with(view)

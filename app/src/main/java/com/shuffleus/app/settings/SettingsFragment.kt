@@ -15,11 +15,12 @@ import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentSettingsBinding
 import com.shuffleus.app.utils.AddPlayerCallbackListener
+import com.shuffleus.app.utils.RemovePlayerCallbackListener
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
 import java.lang.Integer.max
 
-class SettingsFragment : Fragment(), AddPlayerCallbackListener {
+class SettingsFragment : Fragment(), AddPlayerCallbackListener, RemovePlayerCallbackListener {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding: FragmentSettingsBinding
@@ -42,6 +43,36 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
     override fun onPlayerAdded(newUser:User){
         settingsViewModel.addUser(newUser)
+        lifecycleScope.launch{
+            val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
+            groupSizePicker?.minValue = 2
+            groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
+            groupSizePicker?.wrapSelectorWheel = false
+            groupSizePicker?.value = settingsViewModel.getGroupSize()
+            groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+                run {
+                    settingsViewModel.updateGroupSize(newVal)
+                }
+            }
+        }
+    }
+
+    /*
+    Just updates group size picker
+     */
+    override fun onPlayerDeleted(oldUser: User) {
+        lifecycleScope.launch{
+            val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
+            groupSizePicker?.minValue = 2
+            groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
+            groupSizePicker?.wrapSelectorWheel = false
+            groupSizePicker?.value = settingsViewModel.getGroupSize()
+            groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+                run {
+                    settingsViewModel.updateGroupSize(newVal)
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -70,7 +101,7 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
     private fun doNothing(){}
 
     private fun handleUsers(users: List<User>) {
-        val adapter = UsersAdapter(users)
+        val adapter = UsersAdapter(users, this)
         binding.rvAllUsers.adapter = adapter
         binding.rvAllUsers.layoutManager = LinearLayoutManager(requireContext())
     }
