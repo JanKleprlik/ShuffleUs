@@ -29,7 +29,8 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
 
     suspend fun getTimeInMillis(): Int{
         // idx * 5 minutes * 60 seconds * 1000 ms
-        return appSettings.getTimerIdx() * 5 * 60 * 1000
+        //return appSettings.getTimerIdx() * 5 * 60 * 1000
+        return appSettings.getTimerIdx() * 60 * 1000
     }
 
     fun getUsers(): LiveData<ViewModelResponseState<List<User>, String>> {

@@ -25,20 +25,7 @@ class TimerExpiredReceiver : BroadcastReceiver() {
                 TimerPreferences.setTimerState(MainFragment.TimerState.Stopped, context)
                 TimerPreferences.setAlarmSetTime(0, context)
             }
-            Constants.ACTION_RESTART -> {
-                // cancel notifications
-                val notifManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notifManager.cancel(notificationID)
-
-                // restart timer
-                val minutesRemaining = TimerPreferences.getTimerLength(context)
-                val secondsRemaining = minutesRemaining * 60L
-                MainFragment.setAlarm(context, MainFragment.nowSeconds, secondsRemaining)
-                TimerPreferences.setTimerState(MainFragment.TimerState.Running, context)
-                TimerPreferences.setSecondsRemaining(secondsRemaining, context)
-            }
         }
-
     }
 
     // fire notification with restart button
@@ -52,11 +39,6 @@ class TimerExpiredReceiver : BroadcastReceiver() {
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        // intent for restart timer button
-        val restartIntent = Intent(context, TimerExpiredReceiver::class.java)
-        restartIntent.action = Constants.ACTION_RESTART
-        val restartPendingIntent = PendingIntent.getBroadcast(context,
-            0, restartIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         // the notification itself
         val notification = NotificationCompat.Builder(
@@ -67,7 +49,6 @@ class TimerExpiredReceiver : BroadcastReceiver() {
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(context.getString(R.string.timer_notification))
             .setContentIntent(notificationPendingIntent)
-            .addAction(R.drawable.ic_play_arrow, "RESTART", restartPendingIntent)
             .setAutoCancel(true)
             .build()
 
