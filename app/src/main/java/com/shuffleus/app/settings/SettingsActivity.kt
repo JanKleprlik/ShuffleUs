@@ -1,9 +1,7 @@
 package com.shuffleus.app.settings
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import com.shuffleus.app.settings.AddPlayerFragment
 import com.shuffleus.app.R
 
 class SettingsActivity : AppCompatActivity() {

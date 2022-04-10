@@ -3,14 +3,13 @@ package com.shuffleus.app.main
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuffleus.app.R
 import com.shuffleus.app.data.RailsItem
 import com.shuffleus.app.utils.inflate
 
-class GroupsAdapter() : RecyclerView.Adapter<BaseRailsViewHolder<RailsItem>>(){
+class GroupsAdapter : RecyclerView.Adapter<BaseRailsViewHolder<RailsItem>>(){
 
     var groups:List<RailsItem> = emptyList()
         set(value) {
@@ -43,13 +42,11 @@ class RailsGroupNameViewHolder(view: View) :BaseRailsViewHolder<RailsItem.RailsG
     }
 }
 
-class RailsPeopleViewHolder(view: View) :BaseRailsViewHolder<RailsItem.RailsPeople>(view){
-    private val view = view
-
+class RailsPeopleViewHolder(private val view: View) :BaseRailsViewHolder<RailsItem.RailsPeople>(view){
     private val rvPeople by lazy { view.findViewById<RecyclerView>(R.id.rv_group)}
 
     override fun bind(item: RailsItem.RailsPeople) {
-        var adapter = UsersAdapter()
+        val adapter = UsersAdapter()
 
         rvPeople.adapter = adapter
         rvPeople.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)

@@ -1,7 +1,5 @@
 package com.shuffleus.app.repository
 
-import com.shuffleus.app.data.Group
-import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.Lecture
 
 interface LectureRepository
@@ -14,7 +12,7 @@ interface LectureRepository
     /**
      * Delete all lectures.
      */
-    suspend fun deleteLectures(): Unit
+    suspend fun deleteLectures()
 
     /**
      * Adds users into the DB.

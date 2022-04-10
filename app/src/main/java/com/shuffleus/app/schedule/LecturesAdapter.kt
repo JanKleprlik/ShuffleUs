@@ -1,20 +1,11 @@
 package com.shuffleus.app.schedule
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
-import com.shuffleus.app.R
 import com.shuffleus.app.data.Lecture
-import com.shuffleus.app.databinding.FragmentAddPlayerBinding
 import com.shuffleus.app.databinding.LectureItemBinding
-import com.shuffleus.app.repository.LectureRepository
-import com.shuffleus.app.repository.room.LectureRoomRepository
-import com.shuffleus.app.repository.room.RoomRepository
 
 class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureViewHolder>(){
 
@@ -23,7 +14,7 @@ class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureView
     private val binding: LectureItemBinding
         get() = _binding!!
 
-    var lectures = lectures
+    private var lectures = lectures
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -35,7 +26,7 @@ class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureView
     }
 
     override fun onBindViewHolder(holder: LectureViewHolder, position: Int) {
-        holder.bind(lectures[position], this)
+        holder.bind(lectures[position])
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +34,7 @@ class LecturesAdapter(lectures: List<Lecture>): RecyclerView.Adapter<LectureView
     }
 }
 
-class LectureViewHolder(private val binding: LectureItemBinding): RecyclerView.ViewHolder(binding.root){
+class LectureViewHolder(binding: LectureItemBinding): RecyclerView.ViewHolder(binding.root){
 
     var tvLectureCode: TextView = binding.tvLectureCode
     var tvLectureLecturer: TextView = binding.tvLectureLecturer
@@ -52,7 +43,7 @@ class LectureViewHolder(private val binding: LectureItemBinding): RecyclerView.V
     var tvLectureTime: TextView = binding.tvLectureTime
 
 
-    fun bind(lecture: Lecture, adapter: LecturesAdapter){
+    fun bind(lecture: Lecture){
         tvLectureCode.text = lecture.code
         tvLectureLecturer.text = lecture.lecturer
         tvLectureRoom.text = lecture.room

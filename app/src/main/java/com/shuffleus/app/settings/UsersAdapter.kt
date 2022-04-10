@@ -1,7 +1,6 @@
 package com.shuffleus.app.settings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.lifecycleScope
@@ -9,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
-import com.shuffleus.app.R
 import com.shuffleus.app.data.User
-import com.shuffleus.app.databinding.UserItemDefaultBinding
 import com.shuffleus.app.databinding.UserItemSettingsBinding
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
@@ -48,11 +45,11 @@ class UsersAdapter(users: List<User>, private val callbackListener: SettingsFrag
 class UserViewHolder(private val binding: UserItemSettingsBinding, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(binding.root){
     private val repository: Repository by lazy { RoomRepository(callbackListener.activity!!.application) }
 
-    var txtName: TextView = binding.txtName
-    var txtSurname: TextView = binding.txtSurname
-    var btnIsActive: CheckBox = binding.btnIsActive
-    var btnDelete: Button = binding.btnDelete
-    var imgAvatar: ImageView = binding.imgAvatar
+    private var txtName: TextView = binding.txtName
+    private var txtSurname: TextView = binding.txtSurname
+    private var btnIsActive: CheckBox = binding.btnIsActive
+    private var btnDelete: Button = binding.btnDelete
+    private var imgAvatar: ImageView = binding.imgAvatar
 
     fun bind(user: User, adapter: UsersAdapter){
         txtName.text = user.name
@@ -61,7 +58,7 @@ class UserViewHolder(private val binding: UserItemSettingsBinding, private val c
 
 
         btnIsActive.setOnClickListener{
-            if (user.wasChanged == false){
+            if (!user.wasChanged){
                 user.wasActive = user.isActive
             }
             user.isActive = user.isActive.not()
@@ -77,7 +74,7 @@ class UserViewHolder(private val binding: UserItemSettingsBinding, private val c
                 repository.deleteUser(user)
                 adapter.users = repository.getUsers()
             }
-            callbackListener.onPlayerDeleted(user);
+            callbackListener.onPlayerDeleted(user)
         }
 
         Glide.with(binding.root)

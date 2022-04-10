@@ -7,7 +7,6 @@ import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.data.User
 import com.shuffleus.app.utils.Converters
-import com.shuffleus.app.utils.ioThread
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch

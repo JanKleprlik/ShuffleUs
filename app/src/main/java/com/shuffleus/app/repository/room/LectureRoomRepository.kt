@@ -1,9 +1,7 @@
 package com.shuffleus.app.repository.room
 
-import android.app.Application
 import android.content.Context
 import com.shuffleus.app.data.Lecture
-import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.LectureRepository
 
 class LectureRoomRepository(context: Context): LectureRepository {

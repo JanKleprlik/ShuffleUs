@@ -5,9 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.shuffleus.app.AppSettings.Companion.APP_PREFERENCES
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -18,7 +18,6 @@ class AppSettings(private val context: Context) {
 
     companion object {
         const val APP_PREFERENCES = "shuffleus_client"
-        private val KEY_APP_LAUNCH_COUNT = intPreferencesKey("app_launches")
         private val KEY_GROUPNAMES_IDX = intPreferencesKey("groupnames")
         private val KEY_OLD_GROUPNAMES_IDX = intPreferencesKey("old_groupnames")
         private val KEY_GROUPSIZE = intPreferencesKey("groupsize")
@@ -26,24 +25,89 @@ class AppSettings(private val context: Context) {
         private val KEY_SEED = intPreferencesKey("seed")
         private val KEY_OLD_SEED = intPreferencesKey("old_seed")
         private val KEY_TIMER_IDX = intPreferencesKey("timer_idx")
-
+        private val KEY_TIMER_LENGTH = intPreferencesKey("timer_length")
+        private val KEY_TIMER_PREVIOUS_LENGTH = longPreferencesKey("timer_previous_length")
+        private val KEY_TIMER_STATE = intPreferencesKey("timer_state")
+        private val KEY_SECONDS_REMAINING = longPreferencesKey("seconds_remaining")
+        private val KEY_ALARM_TIME = longPreferencesKey("alarm_time")
     }
 
 
     /**
-     * Get how many times the application was launched.
+     * Read timer state
      */
-    suspend fun getAppLaunchesCount() = context.dataStore.data.map { preferences ->
-        preferences[KEY_APP_LAUNCH_COUNT] ?: 0
+    suspend fun getAlarmSetTime(): Long = context.dataStore.data.map { preferences ->
+        preferences[KEY_ALARM_TIME] ?: 0
     }.first()
 
     /**
-     * Increase app launched counter.
+     * Set timer state
      */
-    suspend fun increaseAppLaunchesCount() {
+    suspend fun setAlarmSetTime(value: Long) {
         context.dataStore.edit { preferences ->
-            val appLaunchCount = preferences[KEY_APP_LAUNCH_COUNT] ?: 0
-            preferences[KEY_APP_LAUNCH_COUNT] = appLaunchCount + 1
+            preferences[KEY_ALARM_TIME] = value
+        }
+    }
+    /**
+     * Read remaining seconds
+     */
+    suspend fun getSecondsRemaining(): Long = context.dataStore.data.map { preferences ->
+        preferences[KEY_SECONDS_REMAINING] ?: 1
+    }.first()
+
+    /**
+     * Set remaining seconds
+     */
+    suspend fun setSecondsRemaining(value: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_SECONDS_REMAINING] = value
+        }
+    }
+    /**
+     * Read timer state
+     */
+    suspend fun getTimerState(): Int = context.dataStore.data.map { preferences ->
+        preferences[KEY_TIMER_STATE] ?: 1
+    }.first()
+
+    /**
+     * Set timer state
+     */
+    suspend fun setTimerState(value: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_TIMER_STATE] = value
+        }
+    }
+
+    /**
+     * Read timer length
+     */
+    suspend fun getTimerLength(): Int = context.dataStore.data.map { preferences ->
+        preferences[KEY_TIMER_LENGTH] ?: 1
+    }.first()
+
+    /**
+     * Set timer length
+     */
+    suspend fun setTimerLength(value: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_TIMER_LENGTH] = value
+        }
+    }
+
+    /**
+     * Read timer previous length
+     */
+    suspend fun getPreviousTimerLengthSeconds(): Long = context.dataStore.data.map { preferences ->
+        preferences[KEY_TIMER_PREVIOUS_LENGTH] ?: 1
+    }.first()
+
+    /**
+     * Set timer previous length
+     */
+    suspend fun setPreviousTimerLengthSeconds(value: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_TIMER_PREVIOUS_LENGTH] = value
         }
     }
 
@@ -117,7 +181,7 @@ class AppSettings(private val context: Context) {
     /**
      * Get seed
      */
-    suspend fun getSeed() = context.dataStore.data.map { preferences ->
+    private suspend fun getSeed() = context.dataStore.data.map { preferences ->
         preferences[KEY_SEED] ?: 1
     }.first()
 

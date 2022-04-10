@@ -29,16 +29,12 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
 
     suspend fun getTimeInMillis(): Int{
         // idx * 5 minutes * 60 seconds * 1000 ms
-        //return appSettings.getTimerIdx() * 5 * 60 * 1000
-        return appSettings.getTimerIdx() * 60 * 1000
+        return appSettings.getTimerIdx() * 5 * 60 * 1000
     }
 
-    fun getUsers(): LiveData<ViewModelResponseState<List<User>, String>> {
-        return _activeUsers
-    }
 
     suspend fun getGroups(): LiveData<ViewModelResponseState<List<Group>, String>>{
-        if (isLastRunValid() == false)
+        if (!isLastRunValid())
             return MutableLiveData(ViewModelResponseState.Error("Previous run is not valid. Try Shuffle."))
 
         val groups = mutableListOf<Group>()
@@ -55,7 +51,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         return MutableLiveData(ViewModelResponseState.Success(groups))
     }
 
-    suspend fun updatePreferences(): Unit{
+    suspend fun updatePreferences() {
         // update seed
         appSettings.incrementSeed()
 

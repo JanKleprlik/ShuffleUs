@@ -1,35 +1,18 @@
 package com.shuffleus.app.schedule
 
-import android.Manifest
-import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TableLayout
 import android.widget.Toast
-import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.tabs.TabItem
 import com.shuffleus.app.R
 import com.shuffleus.app.data.Lecture
-import com.shuffleus.app.data.User
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.shuffleus.app.databinding.FragmentAddLectureBinding
-import com.shuffleus.app.databinding.FragmentAddPlayerBinding
-import com.shuffleus.app.utils.CallbackListener
 import com.shuffleus.app.utils.LectureCallbackListener
 import java.io.File
 import java.lang.Exception
@@ -45,7 +28,7 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddLectureBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,7 +44,7 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
 
         val addBtn = binding.btnAdd
         addBtn.setOnClickListener{
-            val lecture = getNewLecture(view)
+            val lecture = getNewLecture()
             if(lecture == null){
                 Toast.makeText(activity, "Please fill at least start and finish time", Toast.LENGTH_LONG).show()
             }
@@ -159,7 +142,7 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
     }
 
     //Gets user input from provided views and builds lecture. Only start and end times are required
-    private fun getNewLecture(view:View) : Lecture? {
+    private fun getNewLecture() : Lecture? {
         val endText = binding.ettEnd
         val startText = binding.ettStart
 

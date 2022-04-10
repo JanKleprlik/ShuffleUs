@@ -2,7 +2,6 @@ package com.shuffleus.app.repository.room
 
 import androidx.room.*
 import com.shuffleus.app.data.Lecture
-import com.shuffleus.app.data.User
 
 @Dao
 interface LectureDao {

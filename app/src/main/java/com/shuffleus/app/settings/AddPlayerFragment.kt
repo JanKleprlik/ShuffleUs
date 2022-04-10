@@ -6,14 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentAddPlayerBinding
-import com.shuffleus.app.databinding.FragmentMainBinding
 import com.shuffleus.app.utils.AddPlayerCallbackListener
 
 
@@ -27,7 +23,7 @@ class AddPlayerFragment(private val callbackListener: AddPlayerCallbackListener)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }

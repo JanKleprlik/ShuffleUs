@@ -1,6 +1,5 @@
 package com.shuffleus.app.repository
 
-import com.shuffleus.app.data.Group
 import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 
@@ -13,7 +12,7 @@ interface Repository
     suspend fun getActiveUsers(): List<User>
 
     /**
-     * Get raw actuver users.
+     * Get raw active users.
      * Their flag isActive is on.
      */
     suspend fun getRawActiveUsers(): List<User>
@@ -37,15 +36,14 @@ interface Repository
      * Update user information.
      * Such as whether it is active.
      */
-    suspend fun updateUser(user: User): Unit
+    suspend fun updateUser(user: User)
 
     /**
      * Delete user.
      */
-    suspend fun deleteUser(user: User): Unit
+    suspend fun deleteUser(user: User)
 
 
-    // can be deleted
     suspend fun getGroupNamesAll(): Iterable<GroupNames>
 
     /**
@@ -57,5 +55,5 @@ interface Repository
      * Make users current
      * Updates wasChanged flag
      */
-    suspend fun makeUsersCurrent(): Unit
+    suspend fun makeUsersCurrent()
 }

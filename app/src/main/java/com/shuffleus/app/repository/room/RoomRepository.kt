@@ -1,7 +1,6 @@
 package com.shuffleus.app.repository.room
 
 import android.app.Application
-import com.shuffleus.app.App
 import com.shuffleus.app.data.GroupNames
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
@@ -22,7 +21,7 @@ class RoomRepository(app: Application): Repository {
     }
 
     override suspend fun addUser(vararg users:User){
-        return db.userDao().insertAll(users = *users)
+        return db.userDao().insertAll(users = users)
     }
 
     override suspend fun makeUsersCurrent() {

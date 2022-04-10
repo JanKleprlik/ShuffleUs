@@ -2,16 +2,11 @@ package com.shuffleus.app.schedule
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.shuffleus.app.R
-import com.shuffleus.app.data.Lecture
-import java.io.File
-import java.lang.Exception
 
 class ScheduleActivity : AppCompatActivity() {
     private val REQUEST_EXTERNAL_STORAGE = 999

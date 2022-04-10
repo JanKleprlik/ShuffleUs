@@ -10,14 +10,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.shuffleus.app.R
 import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.databinding.FragmentScheduleBinding
 import com.shuffleus.app.utils.*
-import org.w3c.dom.Text
-import android.view.WindowManager
-import androidx.core.view.allViews
 import androidx.lifecycle.lifecycleScope
 import com.shuffleus.app.databinding.LectureItemBinding
 import com.shuffleus.app.databinding.TimeItemBinding

@@ -1,6 +1,5 @@
 package com.shuffleus.app.utils
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
@@ -11,7 +10,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.shuffleus.app.App
 import com.shuffleus.app.R
 import com.shuffleus.app.main.MainActivity
-import com.shuffleus.app.main.MainFragment
 
 class TimerExpiredReceiver : BroadcastReceiver() {
 
@@ -21,9 +19,6 @@ class TimerExpiredReceiver : BroadcastReceiver() {
         when (intent.action){
             Constants.ACTION_START -> {
                 fireNotification(context)
-
-                TimerPreferences.setTimerState(MainFragment.TimerState.Stopped, context)
-                TimerPreferences.setAlarmSetTime(0, context)
             }
         }
     }
