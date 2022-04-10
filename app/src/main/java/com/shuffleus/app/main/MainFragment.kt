@@ -56,6 +56,12 @@ class MainFragment: Fragment() {
     override fun onResume() {
         super.onResume()
 
+        // update time on a timer
+        lifecycleScope.launch{
+            val time = mainViewModel.getTimeInMillis().toLong()
+            val timeInMinutes = (time / (1000 * 60)).toInt()
+            TimerPreferences.setTimerLength(timeInMinutes, context!!)
+        }
         // update timer if necessary
         initTimer()
         removeAlarm(this.context!!)
