@@ -80,7 +80,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/start_time"
-        android:inputType="time"
         app:layout_constraintEnd_toStartOf="@+id/ettEnd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCode" />
@@ -91,7 +90,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/end_time"
-        android:inputType="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCode" />
 
@@ -104,48 +102,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etLecturer" />
 
-    <com.google.android.material.tabs.TabLayout
+    <Spinner
         android:id="@+id/tlWeekday"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ettEnd"
-        tools:layout_editor_absoluteX="154dp">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/DayMonday"
-            android:singleLine="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pond_l" />
-
-        <com.google.android.material.tabs.TabItem
-            android:singleLine="true"
-            android:id="@+id/DayTuesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ter" />
-
-        <com.google.android.material.tabs.TabItem
-            android:singleLine="true"
-            android:id="@+id/DayWednesday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/streda" />
-
-        <com.google.android.material.tabs.TabItem
-            android:singleLine="true"
-            android:id="@+id/DayThursday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ctvrtek" />
-
-        <com.google.android.material.tabs.TabItem
-            android:singleLine="true"
-            android:id="@+id/DayFriday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/patek" />
-    </com.google.android.material.tabs.TabLayout>
+        android:entries="@array/array_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ettEnd" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

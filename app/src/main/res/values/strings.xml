@@ -32,4 +32,12 @@
     <string name="ctvrtek">Čtvrtek</string>
     <string name="patek">Pátek</string>
     <string name="schedule">Schedule</string>
+
+    <string-array name="array_name">
+        <item>Pondělí</item>
+        <item>Úterý</item>
+        <item>Středa</item>
+        <item>Čtvrtek</item>
+        <item>Pátek</item>
+    </string-array>
 </resources>

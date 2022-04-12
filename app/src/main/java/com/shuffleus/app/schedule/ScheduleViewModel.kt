@@ -9,7 +9,7 @@ import com.shuffleus.app.utils.ViewModelResponseState
 
 class ScheduleViewModel(app:Application): AndroidViewModel(app) {
     //private val repository: Repository by lazy { InMemoryLectureRepository() }
-    private val repository: LectureRepository by lazy { LectureRoomRepository(app.baseContext) }
+    private val repository: LectureRepository by lazy { LectureRoomRepository(app) }
 
     private val _allLectures : MutableLiveData<ViewModelResponseState<List<Lecture>, String>> by lazy {
         MutableLiveData<ViewModelResponseState<List<Lecture>, String>>().apply {
@@ -43,7 +43,6 @@ class ScheduleViewModel(app:Application): AndroidViewModel(app) {
         _allLectures.postValue(ViewModelResponseState.Loading)
 
         val lectures = repository.getLectures()
-        //@todo error if null
         _allLectures.postValue(ViewModelResponseState.Success(lectures))
     }
 }

@@ -1,6 +1,5 @@
 package com.shuffleus.app.schedule
 
-
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -76,7 +75,7 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
         }
     }
 
-    // This function is called upon retriving information about lectures
+    // This function is called upon retrieving information about lectures
     private fun handleLectures(lectures: List<Lecture>) {
         binding.rlLectures.removeAllViewsInLayout()
         getAvailableWidthAndHeight()
@@ -161,13 +160,12 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
             val inflater = LayoutInflater.from(this.context)
 
             val itemBinder = TimeItemBinding.inflate(inflater, null, false)
-            val timeView = inflater.inflate(R.layout.time_item, null, false)
 
             itemBinder.tvTime.text = hours.plus(":").plus(minutes)
 
-            timeView.x = timeToXCoordinate(current)
-            timeView.y = 0.toFloat()
-            binding.rlLectures.addView(timeView)
+            itemBinder.root.x = timeToXCoordinate(current)
+            itemBinder.root.y = 0.toFloat()
+            binding.rlLectures.addView(itemBinder.root)
             current += 100
         }
     }
@@ -176,7 +174,7 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
     private fun getAvailableWidthAndHeight(){
         val displayMetrics = DisplayMetrics()
 
-        activity!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
         height = displayMetrics.heightPixels
         width = displayMetrics.widthPixels
         height = (height-getStatusBarHeight())
@@ -214,7 +212,7 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
     // view consisting of information about the lecture
     private fun buildLectureView(item: Lecture) :View{
         val inflater = LayoutInflater.from(this.context)
-        val lec = inflater.inflate(R.layout.lecture_item, null, false)
+        //val lec = inflater.inflate(R.layout.lecture_item, null, false)
 
         val itemBinder = LectureItemBinding.inflate(inflater, null, false)
 
@@ -228,19 +226,19 @@ class ScheduleFragment : Fragment(), LectureCallbackListener {
         minutes = formatMinutes(minutes)
         itemBinder.tvLectureTime.text = hours.plus(":").plus(minutes)
 
-        lec.x = timeToXCoordinate(item.startTime)
-        lec.y = (height*0.95/5*item.day+height/20).toFloat()
+        itemBinder.root.x = timeToXCoordinate(item.startTime)
+        itemBinder.root.y = (height*0.95/5*item.day+height/20).toFloat()
 
         val lectureEndX = timeToXCoordinate(item.endTime)
-        lec.layoutParams = RelativeLayout.LayoutParams((lectureEndX -  lec.x).toInt(), height/5*95/100)
+        itemBinder.root.layoutParams = RelativeLayout.LayoutParams((lectureEndX -  itemBinder.root.x).toInt(), height/5*95/100)
 
         if(item.lection){
-            lec.setBackgroundResource(R.drawable.dark_blue_with_border)
+            itemBinder.root.setBackgroundResource(R.drawable.dark_blue_with_border)
         }
         else{
-            lec.setBackgroundResource(R.drawable.light_blue_with_border)
+            itemBinder.root.setBackgroundResource(R.drawable.light_blue_with_border)
         }
-        return lec
+        return itemBinder.root
     }
 
     companion object {

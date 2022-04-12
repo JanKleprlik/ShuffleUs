@@ -164,7 +164,7 @@ class AddLectureFragment (private val callbackListener: LectureCallbackListener)
         val tlWeekday = binding.tlWeekday
 
         val lec = Lecture(
-            tlWeekday.selectedTabPosition,
+            tlWeekday.selectedItemPosition,
             lectureStart,
             lectureEnd,
             lectureName.text.toString(),

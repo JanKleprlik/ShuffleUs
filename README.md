@@ -14,7 +14,7 @@
 
 ## Installation
 
-Downloadable form Google Apps to devicues running at least Android API level 29.
+Downloadable form Google Apps to devices running at least Android API level 29.
 >TBD 
 
 ## User guide

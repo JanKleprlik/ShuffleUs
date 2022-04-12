@@ -10,7 +10,7 @@ import com.shuffleus.app.R
 
 class ScheduleActivity : AppCompatActivity() {
     private val REQUEST_EXTERNAL_STORAGE = 999
-    private val PERMISSIONS_STORAGE = arrayOf<String>(
+    private val PERMISSIONS_STORAGE = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
@@ -22,6 +22,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().add(R.id.schedule_fragment_container, ScheduleFragment.newInstance()).commit()
         supportActionBar?.hide()
+
     }
 
     //Gets permission for reading CSV file
