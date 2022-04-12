@@ -2,6 +2,7 @@ package com.shuffleus.app.main
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -270,7 +271,7 @@ class MainFragment: Fragment() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, TimerExpiredReceiver::class.java)
         intent.action = Constants.ACTION_START
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
         appSettings.setAlarmSetTime(nowSeconds)
         return wakeUpTime
@@ -278,7 +279,7 @@ class MainFragment: Fragment() {
 
     private suspend fun removeAlarm(context: Context){
         val intent = Intent(context, TimerExpiredReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
         appSettings.setAlarmSetTime(0)
