@@ -1,22 +1,25 @@
 package com.shuffleus.app.settings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
-import com.shuffleus.app.R
 import com.shuffleus.app.data.User
-import com.shuffleus.app.main.MainFragment
+import com.shuffleus.app.databinding.UserItemSettingsBinding
 import com.shuffleus.app.repository.Repository
 import com.shuffleus.app.repository.room.RoomRepository
-import java.security.Signature
+import kotlinx.coroutines.launch
 
-class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
+class UsersAdapter(users: List<User>, private val callbackListener: SettingsFragment): RecyclerView.Adapter<UserViewHolder>(){
+
+    // MVVM
+    private var _binding: UserItemSettingsBinding? = null
+    private val binding: UserItemSettingsBinding
+        get() = _binding!!
 
     var users = users
         set(value) {
@@ -25,9 +28,9 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_item_settings, parent, false)
+        _binding = UserItemSettingsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return UserViewHolder(view)
+        return UserViewHolder(binding, callbackListener)
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
@@ -39,14 +42,14 @@ class UsersAdapter(users: List<User>): RecyclerView.Adapter<UserViewHolder>(){
     }
 }
 
-class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
-    private val repository: Repository by lazy { RoomRepository(view.context) }
+class UserViewHolder(private val binding: UserItemSettingsBinding, private val callbackListener: SettingsFragment): RecyclerView.ViewHolder(binding.root){
+    private val repository: Repository by lazy { RoomRepository(callbackListener.requireActivity().application) }
 
-    var txtName: TextView = view.findViewById(R.id.txt_name)
-    var txtSurname: TextView = view.findViewById(R.id.txt_surname)
-    var btnIsActive: CheckBox = view.findViewById(R.id.btn_isActive)
-    var btnDelete: Button = view.findViewById(R.id.btn_delete)
-    var imgAvatar: ImageView = view.findViewById(R.id.img_avatar)
+    private var txtName: TextView = binding.txtName
+    private var txtSurname: TextView = binding.txtSurname
+    private var btnIsActive: CheckBox = binding.btnIsActive
+    private var btnDelete: Button = binding.btnDelete
+    private var imgAvatar: ImageView = binding.imgAvatar
 
     fun bind(user: User, adapter: UsersAdapter){
         txtName.text = user.name
@@ -55,20 +58,26 @@ class UserViewHolder(private val view: View): RecyclerView.ViewHolder(view){
 
 
         btnIsActive.setOnClickListener{
-            if (user.wasChanged == false){
+            if (!user.wasChanged){
                 user.wasActive = user.isActive
             }
             user.isActive = user.isActive.not()
             user.wasChanged = true
-            repository.updateUser(user)
+
+            callbackListener.lifecycleScope.launch{
+                repository.updateUser(user)
+            }
         }
 
         btnDelete.setOnClickListener{
-            repository.deleteUser(user)
-            adapter.users = repository.getUsers()
+            callbackListener.lifecycleScope.launch{
+                repository.deleteUser(user)
+                adapter.users = repository.getUsers()
+            }
+            callbackListener.onPlayerDeleted(user)
         }
 
-        Glide.with(view)
+        Glide.with(binding.root)
             .load("https://picsum.photos/64/64")
             .apply(RequestOptions.circleCropTransform()
                 .signature(ObjectKey("${user.name}_${user.surname}")))

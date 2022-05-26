@@ -4,15 +4,19 @@ import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.shuffleus.app.data.GroupNames
+import com.shuffleus.app.data.Lecture
 import com.shuffleus.app.data.User
 import com.shuffleus.app.utils.Converters
-import com.shuffleus.app.utils.ioThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, GroupNames::class], version = 1)
+@Database(entities = [Lecture::class,User::class, GroupNames::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun groupNamesDao() : GroupNamesDao
+    abstract fun lectureDao() : LectureDao
 
     companion object {
 
@@ -31,31 +35,13 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         // insert the data on the IO Thread
-                        ioThread {
-                            getInstance(context).userDao().insertAll(*USER_DATA.toTypedArray())
+                        CoroutineScope(SupervisorJob()).launch {
                             getInstance(context).groupNamesDao().insertAll(*GROUP_NAMES_DATA.toTypedArray())
                         }
                     }
                 })
-                .allowMainThreadQueries()
                 .build()
 
-        val USER_DATA = listOf(
-
-            User(name="Me", surname = "Myself & I", isActive = true ),
-        /*
-            User(name="Jan", surname = "Kleprlík", isActive = true ),
-            User(name="Michal", surname = "Fuleky", isActive = true),
-            User(name="Marek", surname = "Majer", isActive = true),
-            User(name="Michal", surname = "Ivicic", isActive = false),
-            User(name="Ondřej", surname = "Müller", isActive = false),
-            User(name="Eliška", surname = "Suchardová", isActive = true),
-            User(name="Pavel", surname = "Zajíc", isActive = false),
-            User(name="Jan", surname = "Novák", isActive = false),
-            User(name="Martin", surname = "Mareš", isActive = true),
-            User(name="Pavel", surname = "Parizek", isActive = true),
-        */
-        )
         val GROUP_NAMES_DATA = listOf(
             GroupNames(name="Greek", names= listOf(
                 "Alpha",

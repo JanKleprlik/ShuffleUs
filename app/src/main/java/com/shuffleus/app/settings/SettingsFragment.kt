@@ -1,25 +1,23 @@
 package com.shuffleus.app.settings
 
-import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.NumberPicker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.shuffleus.app.AppSettings
 import com.shuffleus.app.R
 import com.shuffleus.app.data.User
 import com.shuffleus.app.databinding.FragmentSettingsBinding
 import com.shuffleus.app.utils.AddPlayerCallbackListener
+import com.shuffleus.app.utils.RemovePlayerCallbackListener
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
 import java.lang.Integer.max
 
-class SettingsFragment : Fragment(), AddPlayerCallbackListener {
+class SettingsFragment : Fragment(), AddPlayerCallbackListener, RemovePlayerCallbackListener {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding: FragmentSettingsBinding
@@ -40,8 +38,39 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
         return binding.root
     }
 
-    override fun onPlayerAdded(newUser:User){
-        settingsViewModel.addUser(newUser)
+    override fun onPlayerAdded(player:User){
+        lifecycleScope.launch{
+            settingsViewModel.addUser(player)
+            val groupSizePicker = binding.numGroupSize
+            groupSizePicker.minValue = 2
+            groupSizePicker.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
+            groupSizePicker.wrapSelectorWheel = false
+            groupSizePicker.value = settingsViewModel.getGroupSize()
+            groupSizePicker.setOnValueChangedListener { _, _, newVal ->
+                run {
+                    settingsViewModel.updateGroupSize(newVal)
+                }
+            }
+        }
+    }
+
+    /*
+    Just updates group size picker
+     */
+    override fun onPlayerDeleted(player: User) {
+        lifecycleScope.launch{
+            settingsViewModel.deleteUser(player)
+            val groupSizePicker = binding.numGroupSize
+            groupSizePicker.minValue = 2
+            groupSizePicker.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
+            groupSizePicker.wrapSelectorWheel = false
+            groupSizePicker.value = settingsViewModel.getGroupSize()
+            groupSizePicker.setOnValueChangedListener { _, _, newVal ->
+                run {
+                    settingsViewModel.updateGroupSize(newVal)
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -58,8 +87,8 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
 
         lifecycleScope.launch{
             preparePickers()
+            settingsViewModel.loadData()
         }
-        settingsViewModel.loadData()
     }
 
     override fun onDestroyView() {
@@ -70,41 +99,41 @@ class SettingsFragment : Fragment(), AddPlayerCallbackListener {
     private fun doNothing(){}
 
     private fun handleUsers(users: List<User>) {
-        val adapter = UsersAdapter(users)
+        val adapter = UsersAdapter(users, this)
         binding.rvAllUsers.adapter = adapter
         binding.rvAllUsers.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private suspend fun preparePickers(){
-        val groupSizePicker = view?.findViewById<NumberPicker>(R.id.num_group_size)
-        groupSizePicker?.minValue = 2
-        groupSizePicker?.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
-        groupSizePicker?.wrapSelectorWheel = false
-        groupSizePicker?.value = settingsViewModel.getGroupSize()
-        groupSizePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+        val groupSizePicker = binding.numGroupSize
+        groupSizePicker.minValue = 2
+        groupSizePicker.maxValue = max(settingsViewModel.getNumberOfRawActiveUsers(), 2)
+        groupSizePicker.wrapSelectorWheel = false
+        groupSizePicker.value = settingsViewModel.getGroupSize()
+        groupSizePicker.setOnValueChangedListener { _, _, newVal ->
             run {
                 settingsViewModel.updateGroupSize(newVal)
             }
         }
 
-        val groupNamePicker = view?.findViewById<NumberPicker>(R.id.num_group_names)
+        val groupNamePicker = binding.numGroupNames
         val nameTypes = settingsViewModel.getNameTypes()
-        groupNamePicker?.minValue = 1
-        groupNamePicker?.maxValue = nameTypes.size
-        groupNamePicker?.displayedValues = nameTypes.toTypedArray()
-        groupNamePicker?.value = settingsViewModel.getGroupNamesIdx()
-        groupNamePicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+        groupNamePicker.minValue = 1
+        groupNamePicker.maxValue = nameTypes.size
+        groupNamePicker.displayedValues = nameTypes.toTypedArray()
+        groupNamePicker.value = settingsViewModel.getGroupNamesIdx()
+        groupNamePicker.setOnValueChangedListener { _, _, newVal ->
             run {
                 settingsViewModel.updateGroupsName(newVal)
             }
         }
 
-        val timerPicker = view?.findViewById<NumberPicker>(R.id.num_time_interval)
-        timerPicker?.minValue = 1
-        timerPicker?.maxValue = 12
-        timerPicker?.displayedValues = arrayOf("5 min", "10 min", "15 min", "20 min", "25 min", "30 min", "35 min", "40 min", "45 min", "50 min", "55 min", getString(R.string.one_hour))
-        timerPicker?.value = settingsViewModel.getTimerIdx()
-        timerPicker?.setOnValueChangedListener { picker, oldVal, newVal ->
+        val timerPicker = binding.numTimeInterval
+        timerPicker.minValue = 1
+        timerPicker.maxValue = 12
+        timerPicker.displayedValues = arrayOf("5 min", "10 min", "15 min", "20 min", "25 min", "30 min", "35 min", "40 min", "45 min", "50 min", "55 min", getString(R.string.one_hour))
+        timerPicker.value = settingsViewModel.getTimerIdx()
+        timerPicker.setOnValueChangedListener { _, _, newVal ->
             run {
                 settingsViewModel.updateTimerIdx(newVal)
             }

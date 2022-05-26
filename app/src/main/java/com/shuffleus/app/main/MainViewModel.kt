@@ -15,7 +15,7 @@ import kotlin.random.Random
 class MainViewModel(app:Application): AndroidViewModel(app) {
 
     //private val repository: Repository by lazy { InMemoryRepository() }
-    private val repository: Repository by lazy { RoomRepository(app.baseContext) }
+    private val repository: Repository by lazy { RoomRepository(app) }
 
     private val appSettings: AppSettings by lazy {
         AppSettings(app)
@@ -32,12 +32,9 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         return appSettings.getTimerIdx() * 5 * 60 * 1000
     }
 
-    fun getUsers(): LiveData<ViewModelResponseState<List<User>, String>> {
-        return _activeUsers
-    }
 
     suspend fun getGroups(): LiveData<ViewModelResponseState<List<Group>, String>>{
-        if (isLastRunValid() == false)
+        if (!isLastRunValid())
             return MutableLiveData(ViewModelResponseState.Error("Previous run is not valid. Try Shuffle."))
 
         val groups = mutableListOf<Group>()
@@ -54,7 +51,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         return MutableLiveData(ViewModelResponseState.Success(groups))
     }
 
-    suspend fun updatePreferences(): Unit{
+    suspend fun updatePreferences() {
         // update seed
         appSettings.incrementSeed()
 
@@ -68,12 +65,12 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
     }
 
 
-    fun loadData(){
+    suspend fun loadData(){
         _activeUsers.postValue(ViewModelResponseState.Loading)
         loadUsers()
     }
 
-    private fun loadUsers(){
+    private suspend fun loadUsers(){
         _activeUsers.postValue(ViewModelResponseState.Loading)
 
         val users = repository.getActiveUsers()

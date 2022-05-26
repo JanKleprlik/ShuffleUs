@@ -6,21 +6,21 @@ import com.shuffleus.app.data.User
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user")
-    fun getAll(): List<User>
+    suspend fun getAll(): List<User>
 
     @Query("SELECT * FROM user WHERE (isActive = 1 AND wasChanged = 0) OR (wasChanged = 1 AND wasActive = 1)")
-    fun getActiveUsers(): List<User>
+    suspend fun getActiveUsers(): List<User>
 
     @Query("SELECT * FROM user WHERE isActive = 1")
-    fun getRawActiveUsers(): List<User>
+    suspend fun getRawActiveUsers(): List<User>
 
     @Update
-    fun updateUsers(vararg users: User)
+    suspend fun updateUsers(vararg users: User)
 
     @Insert
-    fun insertAll(vararg users: User)
+    suspend fun insertAll(vararg users: User)
 
     @Delete
-    fun delete(user: User)
+    suspend fun delete(user: User)
 
 }

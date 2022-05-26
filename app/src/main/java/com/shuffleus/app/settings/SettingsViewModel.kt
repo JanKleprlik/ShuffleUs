@@ -1,12 +1,10 @@
 package com.shuffleus.app.settings
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import com.shuffleus.app.AppSettings
 import com.shuffleus.app.data.User
 import com.shuffleus.app.repository.Repository
-import com.shuffleus.app.repository.memory.InMemoryRepository
 import com.shuffleus.app.repository.room.RoomRepository
 import com.shuffleus.app.utils.ViewModelResponseState
 import kotlinx.coroutines.launch
@@ -14,7 +12,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(app:Application): AndroidViewModel(app) {
 
     //private val repository: Repository by lazy { InMemoryRepository() }
-    private val repository: Repository by lazy { RoomRepository(app.baseContext) }
+    private val repository: Repository by lazy { RoomRepository(app) }
 
     private val appSettings: AppSettings by lazy {
         AppSettings(app)
@@ -26,9 +24,14 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         }
     }
 
+    suspend fun deleteUser(user: User){
+        repository.deleteUser(user)
+    }
+
     suspend fun getGroupNamesIdx() :Int{
         return appSettings.getGroupnamesIdx()
     }
+
     suspend fun getGroupSize() : Int{
         return appSettings.getGroupSize()
     }
@@ -55,15 +58,11 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         }
     }
 
-    fun getNumberOfActiveUsers(): Int {
-        return repository.getActiveUsers().size
-    }
-
-    fun getNumberOfRawActiveUsers(): Int {
+    suspend fun getNumberOfRawActiveUsers(): Int {
         return repository.getRawActiveUsers().size
     }
 
-    fun getNameTypes() : List<String> {
+    suspend fun getNameTypes() : List<String> {
         return repository.getGroupNames() as List<String>
     }
 
@@ -71,18 +70,18 @@ class SettingsViewModel(app:Application): AndroidViewModel(app) {
         return _allUsers
     }
 
-    fun addUser(user:User) {
+    suspend fun addUser(user:User) {
         repository.addUser(user)
         //Reload users
         loadUsers()
     }
 
-    fun loadData(){
+    suspend fun loadData(){
         _allUsers.postValue(ViewModelResponseState.Loading)
         loadUsers()
     }
 
-    private fun loadUsers(){
+    private suspend fun loadUsers(){
         _allUsers.postValue(ViewModelResponseState.Loading)
 
         val users = repository.getUsers()

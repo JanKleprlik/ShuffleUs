@@ -14,4 +14,30 @@
     <string name="timer_notification">Time is up.</string>
     <string name="time_interval">Timer</string>
     <string name="one_hour">1 hour</string>
+    <string name="time">Time</string>
+    <string name="remove_all">Remove all</string>
+    <string name="done">Done</string>
+    <string name="jm_no_p_edm_tu">Jméno předmětu</string>
+    <string name="vyu_uj_c">Vyučující</string>
+    <string name="k_d_u_ebny">Kód učebny</string>
+    <string name="k_d_p_edm_tu">Kód předmětu</string>
+    <string name="add">Add</string>
+    <string name="read_from_csv_file">Read from csv file</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="p_edn_ka">Přednáška</string>
+    <string name="pond_l">Pondělí</string>
+    <string name="ter">Úterý</string>
+    <string name="streda">Středa</string>
+    <string name="ctvrtek">Čtvrtek</string>
+    <string name="patek">Pátek</string>
+    <string name="schedule">Schedule</string>
+
+    <string-array name="array_name">
+        <item>Pondělí</item>
+        <item>Úterý</item>
+        <item>Středa</item>
+        <item>Čtvrtek</item>
+        <item>Pátek</item>
+    </string-array>
 </resources>
